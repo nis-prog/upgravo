@@ -1,0 +1,366 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Upgravo 0.1.7\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: upgravo\n"
+
+#: upgravo.php:47
+msgid "Sorry, you are not allowed to do that."
+msgstr ""
+
+#: upgravo.php:101
+msgid "Pro version"
+msgstr ""
+
+#: upgravo.php:132
+msgid "files"
+msgstr ""
+
+#: upgravo.php:133
+msgid "Error:"
+msgstr ""
+
+#: upgravo.php:194
+msgid "Current PHP:"
+msgstr ""
+
+#: upgravo.php:195
+msgid "check for PHP"
+msgstr ""
+
+#: upgravo.php:202
+msgid "Scan again"
+msgstr ""
+
+#: upgravo.php:202
+msgid "Scan plugins and theme"
+msgstr ""
+
+#: upgravo.php:204
+msgid "Include inactive plugins"
+msgstr ""
+
+#: upgravo.php:218
+msgid "Upgravo Pro adds scheduled scans with email alerts, a PDF report for clients, a whitelist of false positives and multisite."
+msgstr ""
+
+#: upgravo.php:219
+msgid "Get Pro"
+msgstr ""
+
+#: upgravo.php:229
+msgid "Cancel"
+msgstr ""
+
+#. translators: %s: PHP version
+#: upgravo.php:253
+msgid "Ready for PHP %s: nothing breaks"
+msgstr ""
+
+#. translators: %s: PHP version
+#: upgravo.php:255
+msgid "Ready for PHP %s: nothing breaks, with deprecation notices"
+msgstr ""
+
+#. translators: %s: PHP version
+#: upgravo.php:257
+msgid "PHP %s: nothing breaks in what was analyzed, but some files could not be checked"
+msgstr ""
+
+#. translators: %s: PHP version
+#: upgravo.php:259
+msgid "Not yet: something active breaks on PHP %s"
+msgstr ""
+
+#: upgravo.php:266
+msgid "Breaks:"
+msgstr ""
+
+#: upgravo.php:267
+msgid "Notices:"
+msgstr ""
+
+#: upgravo.php:268
+msgid "Hidden:"
+msgstr ""
+
+#: upgravo.php:269
+msgid "Download CSV"
+msgstr ""
+
+#. translators: 1: number of items, 2: number of files, 3: seconds, 4: number of batches, 5: peak memory in MB, 6: date
+#: upgravo.php:274
+msgid "%1$d items · %2$d files · %3$d s in %4$d batches · peak memory %5$s MB · %6$s"
+msgstr ""
+
+#: upgravo.php:280
+msgid "What to do first"
+msgstr ""
+
+#: upgravo.php:294
+msgid "Was this scan useful? A short review on WordPress.org helps other site owners find Upgravo."
+msgstr ""
+
+#: upgravo.php:295
+msgid "Leave a review"
+msgstr ""
+
+#: upgravo.php:296
+msgid "Maybe later"
+msgstr ""
+
+#: upgravo.php:297
+msgid "Don't ask again"
+msgstr ""
+
+#: upgravo.php:304
+msgid "Plugin / theme"
+msgstr ""
+
+#: upgravo.php:305
+msgid "Status"
+msgstr ""
+
+#: upgravo.php:306 upgravo.php:318
+msgid "Breaks"
+msgstr ""
+
+#: upgravo.php:307 upgravo.php:320
+msgid "Notices"
+msgstr ""
+
+#: upgravo.php:308 upgravo.php:383
+msgid "Hidden"
+msgstr ""
+
+#: upgravo.php:309
+msgid "Files"
+msgstr ""
+
+#: upgravo.php:322
+msgid "OK"
+msgstr ""
+
+#: upgravo.php:328
+msgid "theme"
+msgstr ""
+
+#: upgravo.php:329 includes/class-phpready-extras.php:75
+msgid "inactive"
+msgstr ""
+
+#: upgravo.php:330
+msgid "Update available:"
+msgstr ""
+
+#. translators: %d: number of files
+#: upgravo.php:336
+msgid "%d not checked"
+msgstr ""
+
+#. translators: 1: number of findings in bundled libraries, 2: total visible findings
+#: upgravo.php:348
+msgid "%1$d of %2$d are in third-party libraries bundled with the plugin (vendor, node_modules…): the author fixes those by updating the library, not their own code."
+msgstr ""
+
+#: upgravo.php:352
+msgid "Not checked:"
+msgstr ""
+
+#: upgravo.php:361 includes/class-phpready-extras.php:134
+msgid "BREAKS"
+msgstr ""
+
+#: upgravo.php:361 includes/class-phpready-extras.php:134
+msgid "NOTICE"
+msgstr ""
+
+#. translators: 1: plugin name, 2: new version, 3: PHP version
+#: includes/class-phpready-extras.php:78
+msgid "Update %1$s to version %2$s and scan again: the installed version breaks on PHP %3$s."
+msgstr ""
+
+#. translators: 1: plugin name, 2: PHP version
+#: includes/class-phpready-extras.php:81
+msgid "%1$s breaks on PHP %2$s but is inactive: it has no effect until activated. If unused, delete it."
+msgstr ""
+
+#. translators: 1: plugin name, 2: PHP version
+#: includes/class-phpready-extras.php:84
+msgid "%1$s breaks on PHP %2$s and has no update available: find a replacement or ask the author for a compatible version before upgrading."
+msgstr ""
+
+#. translators: 1: plugin name, 2: number of files
+#: includes/class-phpready-extras.php:90
+msgid "%1$s: %2$d file(s) could not be analyzed (too big for the memory limit, a syntax error on the current PHP, or the server aborted the request). The verdict does not cover them: expand the row to see which ones and why."
+msgstr ""
+
+#: includes/class-phpready-extras.php:117
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/class-phpready-extras.php:122
+msgid "There is no scan result to export."
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Item"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Version"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Active"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Category"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "File"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Line"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Bundled library"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Message"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Rule"
+msgstr ""
+
+#: includes/class-phpready-extras.php:127
+msgid "Hidden reason"
+msgstr ""
+
+#: includes/class-phpready-extras.php:133 includes/class-phpready-extras.php:137
+msgid "yes"
+msgstr ""
+
+#: includes/class-phpready-extras.php:133 includes/class-phpready-extras.php:137
+msgid "no"
+msgstr ""
+
+#: includes/class-phpready-extras.php:134
+msgid "hidden"
+msgstr ""
+
+#: includes/class-phpready-extras.php:167
+msgid "PHP upgrade readiness"
+msgstr ""
+
+#: includes/class-phpready-extras.php:176
+msgid "Compatibility with a newer PHP version has not been checked yet"
+msgstr ""
+
+#: includes/class-phpready-extras.php:179
+msgid "Scan plugins and theme before raising the PHP version on your hosting."
+msgstr ""
+
+#: includes/class-phpready-extras.php:180
+msgid "Go to Upgravo"
+msgstr ""
+
+#. translators: 1: PHP version, 2: date
+#: includes/class-phpready-extras.php:194
+msgid "The site is ready for PHP %1$s (checked on %2$s)"
+msgstr ""
+
+#. translators: 1: PHP version, 2: date
+#: includes/class-phpready-extras.php:195
+msgid "No active plugin or theme breaks."
+msgstr ""
+
+#. translators: 1: PHP version, 2: date
+#: includes/class-phpready-extras.php:200
+msgid "The site is ready for PHP %1$s, with deprecation notices (checked on %2$s)"
+msgstr ""
+
+#. translators: 1: PHP version, 2: date
+#: includes/class-phpready-extras.php:201
+msgid "Nothing breaks; some plugins will log deprecation notices."
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:206
+msgid "Incomplete check for PHP %s"
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:207
+msgid "Some files could not be analyzed."
+msgstr ""
+
+#. translators: 1: PHP version, 2: date
+#: includes/class-phpready-extras.php:213
+msgid "Something breaks when upgrading to PHP %1$s (checked on %2$s)"
+msgstr ""
+
+#: includes/class-phpready-filter.php:133
+msgid "already applies on the current PHP version"
+msgstr ""
+
+#: includes/class-phpready-filter.php:134
+msgid "code guarded by a version check"
+msgstr ""
+
+#: includes/class-phpready-filter.php:135
+msgid "affects a later PHP version"
+msgstr ""
+
+#: includes/class-phpready-filter.php:136
+msgid "advice, not compatibility"
+msgstr ""
+
+#: includes/class-phpready-filter.php:137
+msgid "analyzer internal"
+msgstr ""
+
+#: includes/class-phpready-job.php:218
+msgid "Must-use plugins (mu-plugins)"
+msgstr ""
+
+#: includes/class-phpready-job.php:235
+msgid "Drop-ins"
+msgstr ""
+
+#: includes/class-phpready-job.php:260
+msgid "parent theme"
+msgstr ""
+
+#: includes/class-phpready-job.php:383
+msgid "the server aborted the request while analyzing it"
+msgstr ""
+
+#. translators: 1: PHP version, 2: line number, 3: parser message
+#: includes/class-phpready-scanner.php:55 includes/class-phpready-scanner.php:75
+msgid "does not compile on PHP %1$s today: line %2$d, %3$s"
+msgstr ""
+
+#. translators: 1: file size in KB, 2: available memory in MB
+#: includes/class-phpready-scanner.php:66
+msgid "%1$d KB, does not fit in available memory (%2$d MB)"
+msgstr ""
+
+#. translators: 1: number of tokens, 2: estimated MB, 3: available MB
+#: includes/class-phpready-scanner.php:87
+msgid "%1$d tokens ≈ %2$d MB, %3$d MB available"
+msgstr ""
+
+#: includes/class-phpready-scanner.php:372
+msgid "the analyzer failed on this file"
+msgstr ""
+

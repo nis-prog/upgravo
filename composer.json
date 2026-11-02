@@ -1,0 +1,17 @@
+{
+    "name": "nicolassalinas/upgravo",
+    "description": "Upgravo – PHP Compatibility Check for WordPress",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "php": ">=7.4",
+        "squizlabs/php_codesniffer": "^4.0.4",
+        "phpcompatibility/php-compatibility": "10.0.0-alpha2",
+        "phpcsstandards/phpcsutils": "^1.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        }
+    }
+}
