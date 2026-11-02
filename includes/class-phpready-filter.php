@@ -104,6 +104,20 @@ class PHPReady_Filter {
 	public static function apply( array $messages, $current, $target, array $context = array() ) {
 		$counts = array( 'breaks' => 0, 'deprecated' => 0, 'hidden' => 0 );
 		$by_reason = array();
+		// El operador `...` (deprecado en PHP 8.5) se marca en la comilla que abre y en la que cierra:
+		// es un solo problema por línea.
+		$seen     = array();
+		$messages = array_values( array_filter( $messages, function ( $m ) use ( &$seen ) {
+			if ( false === stripos( $m['source'], 't_backtick' ) ) {
+				return true;
+			}
+			$k = $m['file'] . '|' . $m['line'] . '|' . $m['source'];
+			if ( isset( $seen[ $k ] ) ) {
+				return false;
+			}
+			$seen[ $k ] = true;
+			return true;
+		} ) );
 		foreach ( $messages as &$m ) {
 			$c = self::classify( $m, $current, $target );
 			/**

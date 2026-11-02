@@ -296,6 +296,7 @@ class PHPReady_Scanner {
 				'--extensions=php',
 				'--parallel=1',
 				'-q',
+				'--ignore-annotations', // un // phpcs:ignore del autor del plugin no puede esconder incompatibilidades
 				'--runtime-set',
 				'testVersion',
 				$test_version,

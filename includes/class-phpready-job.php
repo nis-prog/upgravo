@@ -86,6 +86,27 @@ class PHPReady_Job {
 		return false;
 	}
 
+	/**
+	 * Renueva la hora del candado propio (se llama antes de cada archivo): un archivo lento no lo
+	 * deja vencer a mitad de la tanda, así otra pestaña o el cron no corren el mismo ítem en paralelo.
+	 */
+	public static function touch_lock() {
+		global $wpdb;
+		if ( ! self::$lock_value ) {
+			return;
+		}
+		$parts = explode( '|', self::$lock_value, 2 );
+		$new   = time() . '|' . ( isset( $parts[1] ) ? $parts[1] : '' );
+		if ( $new === self::$lock_value ) {
+			return;
+		}
+		$ok = $wpdb->update( $wpdb->options, array( 'option_value' => $new ), array( 'option_name' => 'phpready_job_lock', 'option_value' => self::$lock_value ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- candado atómico
+		if ( $ok ) {
+			self::$lock_value = $new;
+			wp_cache_delete( 'phpready_job_lock', 'options' );
+		}
+	}
+
 	/** Suelta el candado propio; con $force, cualquiera (solo para uno vencido). */
 	public static function unlock( $force = false ) {
 		global $wpdb;
@@ -377,6 +398,7 @@ class PHPReady_Job {
 			self::BUDGET_SECONDS,
 			function ( $i, $rel ) use ( $ci ) {
 				update_option( 'phpready_job_cursor', array( 'item' => $ci, 'index' => $i, 'rel' => $rel ), false );
+				self::touch_lock();
 			},
 			'core' === $item['type'],
 			$skip,

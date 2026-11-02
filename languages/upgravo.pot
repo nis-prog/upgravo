@@ -11,170 +11,170 @@ msgstr ""
 msgid "Sorry, you are not allowed to do that."
 msgstr ""
 
-#: upgravo.php:101
+#: upgravo.php:106
 msgid "Pro version"
 msgstr ""
 
-#: upgravo.php:132
+#: upgravo.php:137
 msgid "files"
 msgstr ""
 
-#: upgravo.php:133
+#: upgravo.php:138
 msgid "Error:"
 msgstr ""
 
-#: upgravo.php:194
+#: upgravo.php:199
 msgid "Current PHP:"
 msgstr ""
 
-#: upgravo.php:195
+#: upgravo.php:200
 msgid "check for PHP"
 msgstr ""
 
-#: upgravo.php:202
+#: upgravo.php:207
 msgid "Scan again"
 msgstr ""
 
-#: upgravo.php:202
+#: upgravo.php:207
 msgid "Scan plugins and theme"
 msgstr ""
 
-#: upgravo.php:204
+#: upgravo.php:209
 msgid "Include inactive plugins"
 msgstr ""
 
-#: upgravo.php:218
+#: upgravo.php:223
 msgid "Upgravo Pro adds scheduled scans with email alerts, a PDF report for clients, a whitelist of false positives and multisite."
 msgstr ""
 
-#: upgravo.php:219
+#: upgravo.php:224
 msgid "Get Pro"
 msgstr ""
 
-#: upgravo.php:229
+#: upgravo.php:234
 msgid "Cancel"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:253
+#: upgravo.php:258
 msgid "Ready for PHP %s: nothing breaks"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:255
+#: upgravo.php:260
 msgid "Ready for PHP %s: nothing breaks, with deprecation notices"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:257
+#: upgravo.php:262
 msgid "PHP %s: nothing breaks in what was analyzed, but some files could not be checked"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:259
+#: upgravo.php:264
 msgid "Not yet: something active breaks on PHP %s"
 msgstr ""
 
-#: upgravo.php:266
+#: upgravo.php:271
 msgid "Breaks:"
 msgstr ""
 
-#: upgravo.php:267
+#: upgravo.php:272
 msgid "Notices:"
 msgstr ""
 
-#: upgravo.php:268
+#: upgravo.php:273
 msgid "Hidden:"
 msgstr ""
 
-#: upgravo.php:269
+#: upgravo.php:274
 msgid "Download CSV"
 msgstr ""
 
 #. translators: 1: number of items, 2: number of files, 3: seconds, 4: number of batches, 5: peak memory in MB, 6: date
-#: upgravo.php:274
+#: upgravo.php:279
 msgid "%1$d items · %2$d files · %3$d s in %4$d batches · peak memory %5$s MB · %6$s"
 msgstr ""
 
-#: upgravo.php:280
+#: upgravo.php:285
 msgid "What to do first"
 msgstr ""
 
-#: upgravo.php:294
+#: upgravo.php:299
 msgid "Was this scan useful? A short review on WordPress.org helps other site owners find Upgravo."
 msgstr ""
 
-#: upgravo.php:295
+#: upgravo.php:300
 msgid "Leave a review"
 msgstr ""
 
-#: upgravo.php:296
+#: upgravo.php:301
 msgid "Maybe later"
 msgstr ""
 
-#: upgravo.php:297
+#: upgravo.php:302
 msgid "Don't ask again"
 msgstr ""
 
-#: upgravo.php:304
+#: upgravo.php:309
 msgid "Plugin / theme"
 msgstr ""
 
-#: upgravo.php:305
+#: upgravo.php:310
 msgid "Status"
 msgstr ""
 
-#: upgravo.php:306 upgravo.php:318
+#: upgravo.php:311 upgravo.php:323
 msgid "Breaks"
 msgstr ""
 
-#: upgravo.php:307 upgravo.php:320
+#: upgravo.php:312 upgravo.php:325
 msgid "Notices"
 msgstr ""
 
-#: upgravo.php:308 upgravo.php:383
+#: upgravo.php:313 upgravo.php:388
 msgid "Hidden"
 msgstr ""
 
-#: upgravo.php:309
+#: upgravo.php:314
 msgid "Files"
 msgstr ""
 
-#: upgravo.php:322
+#: upgravo.php:327
 msgid "OK"
 msgstr ""
 
-#: upgravo.php:328
+#: upgravo.php:333
 msgid "theme"
 msgstr ""
 
-#: upgravo.php:329 includes/class-phpready-extras.php:75
+#: upgravo.php:334 includes/class-phpready-extras.php:75
 msgid "inactive"
 msgstr ""
 
-#: upgravo.php:330
+#: upgravo.php:335
 msgid "Update available:"
 msgstr ""
 
 #. translators: %d: number of files
-#: upgravo.php:336
+#: upgravo.php:341
 msgid "%d not checked"
 msgstr ""
 
 #. translators: 1: number of findings in bundled libraries, 2: total visible findings
-#: upgravo.php:348
+#: upgravo.php:353
 msgid "%1$d of %2$d are in third-party libraries bundled with the plugin (vendor, node_modules…): the author fixes those by updating the library, not their own code."
 msgstr ""
 
-#: upgravo.php:352
+#: upgravo.php:357
 msgid "Not checked:"
 msgstr ""
 
-#: upgravo.php:361 includes/class-phpready-extras.php:134
+#: upgravo.php:366 includes/class-phpready-extras.php:134
 msgid "BREAKS"
 msgstr ""
 
-#: upgravo.php:361 includes/class-phpready-extras.php:134
+#: upgravo.php:366 includes/class-phpready-extras.php:134
 msgid "NOTICE"
 msgstr ""
 
@@ -309,39 +309,39 @@ msgstr ""
 msgid "Something breaks when upgrading to PHP %1$s (checked on %2$s)"
 msgstr ""
 
-#: includes/class-phpready-filter.php:133
+#: includes/class-phpready-filter.php:147
 msgid "already applies on the current PHP version"
 msgstr ""
 
-#: includes/class-phpready-filter.php:134
+#: includes/class-phpready-filter.php:148
 msgid "code guarded by a version check"
 msgstr ""
 
-#: includes/class-phpready-filter.php:135
+#: includes/class-phpready-filter.php:149
 msgid "affects a later PHP version"
 msgstr ""
 
-#: includes/class-phpready-filter.php:136
+#: includes/class-phpready-filter.php:150
 msgid "advice, not compatibility"
 msgstr ""
 
-#: includes/class-phpready-filter.php:137
+#: includes/class-phpready-filter.php:151
 msgid "analyzer internal"
 msgstr ""
 
-#: includes/class-phpready-job.php:218
+#: includes/class-phpready-job.php:239
 msgid "Must-use plugins (mu-plugins)"
 msgstr ""
 
-#: includes/class-phpready-job.php:235
+#: includes/class-phpready-job.php:256
 msgid "Drop-ins"
 msgstr ""
 
-#: includes/class-phpready-job.php:260
+#: includes/class-phpready-job.php:281
 msgid "parent theme"
 msgstr ""
 
-#: includes/class-phpready-job.php:383
+#: includes/class-phpready-job.php:405
 msgid "the server aborted the request while analyzing it"
 msgstr ""
 
@@ -360,7 +360,7 @@ msgstr ""
 msgid "%1$d tokens ≈ %2$d MB, %3$d MB available"
 msgstr ""
 
-#: includes/class-phpready-scanner.php:372
+#: includes/class-phpready-scanner.php:373
 msgid "the analyzer failed on this file"
 msgstr ""
 

@@ -4,7 +4,7 @@ Tags: php compatibility, php upgrade, php 8, compatibility checker, site health
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.7
+Stable tag: 0.1.8
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,7 +16,7 @@ Your hosting company says PHP 7.4 (or 8.0, 8.1…) is going away and you have to
 
 **Upgravo** reads the code of every plugin and your theme, on your own server, and gives you a straight answer:
 
-* **Ready for PHP 8.4: nothing breaks** — or **Not yet: something active breaks**, with the exact plugin, file and line.
+* **Ready for PHP 8.5: nothing breaks** — or **Not yet: something active breaks**, with the exact plugin, file and line.
 * **Breaks** vs **deprecation notices**: a removed function stops the site; a deprecation only writes a line in the error log. Upgravo keeps the two apart so you know what is urgent.
 * **What to do first**: if the plugin that breaks has an update available, it says so. If it is inactive, it says it does not matter until you activate it.
 * **No noise**: code that is already guarded by `function_exists()` or a PHP version check is not reported, and findings that only apply to the PHP version you already run are hidden by default (you can still see them, with the reason).
@@ -26,7 +26,7 @@ Your hosting company says PHP 7.4 (or 8.0, 8.1…) is going away and you have to
 * **Runs on shared hosting.** The scan runs in short batches with a progress bar, so it never hits the 30-60 second request limit of shared hosts. Close the tab and come back: it resumes where it stopped.
 * **No `exec()`, no shell, no external server.** Your code never leaves your site. Nothing to sign up for, no license key to see results.
 * **Covers the whole site:** must-use plugins, drop-ins (`advanced-cache.php`, `object-cache.php`, `db.php`…), the parent theme, and every class of WordPress core itself, so a plugin that extends `WP_Widget` or `WC_Payment_Gateway` is checked properly instead of ignored.
-* **Any upgrade path from PHP 7.4 to 8.1, 8.2, 8.3 or 8.4**: removed functions and extensions (`mysql_*`, `mcrypt`, `each()`, `create_function()`…), PHP 8.0 fatal errors, PHP 8.1/8.2/8.3/8.4 deprecations including dynamic properties and `'self::method'` callables. Everything that already applies to the PHP version you run today is shown as hidden, with the reason.
+* **Any upgrade path from PHP 7.4 to 8.1, 8.2, 8.3, 8.4 or 8.5**: removed functions and extensions (`mysql_*`, `mcrypt`, `each()`, `create_function()`…), PHP 8.0 fatal errors, PHP 8.1–8.5 deprecations including dynamic properties, `'self::method'` callables and the PHP 8.5 changes (`(boolean)`/`(integer)` casts, backticks, `curl_close()`…). Everything that already applies to the PHP version you run today is shown as hidden, with the reason.
 * **Site Health integration**: the verdict shows up in Tools → Site Health.
 * **WP-CLI**: `wp upgravo scan --target=8.4 --format=json` returns exit code 1 if anything active breaks, so agencies can check 50 sites from a script.
 * **CSV export** of every finding, including the hidden ones and why they were hidden.
@@ -40,6 +40,10 @@ The analysis engine is [PHPCompatibility](https://github.com/PHPCompatibility/PH
 * [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer) — BSD-3-Clause
 * [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) — LGPL-3.0-or-later
 * [PHPCSUtils](https://github.com/PHPCSStandards/PHPCSUtils) — LGPL-3.0-or-later
+
+= Source code =
+
+The free plugin is developed in the open: https://github.com/nis-prog/upgravo (support stays in the WordPress.org forum).
 
 == Installation ==
 
@@ -89,6 +93,13 @@ Yes. Upgravo Pro adds scheduled scans with an email when an update introduces an
 4. The verdict also shows up in Tools → Site Health.
 
 == Changelog ==
+
+= 0.1.8 =
+* PHP 8.5 can be chosen as the target version.
+* Inline `phpcs:ignore` / `phpcs:ignoreFile` comments in scanned plugins no longer hide PHP compatibility findings.
+* On multisite, scanning requires a super admin (plugins and must-use plugins belong to the whole network).
+* A slow file can no longer let the scan lock expire mid-batch.
+* Uninstall removes Upgravo data from every site of a multisite network.
 
 = 0.1.7 =
 * After a finished scan, the Upgravo screen asks once for a review on WordPress.org (Maybe later hides it for 14 days; Don't ask again hides it for good).

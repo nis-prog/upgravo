@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Upgravo – PHP Compatibility Check
  * Description:       Scans your plugins and theme on your own server and tells you what will break before you upgrade PHP. No external service, no exec().
- * Version:           0.1.7
+ * Version:           0.1.8
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Nicolás Alejandro Salinas
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PHPREADY_VERSION', '0.1.7' );
+define( 'PHPREADY_VERSION', '0.1.8' );
 define( 'PHPREADY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PHPREADY_URL', plugin_dir_url( __FILE__ ) );
 
@@ -71,7 +71,12 @@ function phpready_is_network() {
 }
 
 function phpready_cap() {
-	return phpready_is_network() ? 'manage_network_options' : 'manage_options';
+	if ( phpready_is_network() ) {
+		return 'manage_network_options';
+	}
+	// En un multisitio, los plugins y los mu-plugins son de toda la red: solo el superadministrador
+	// puede escanearlos, aunque el plugin esté activado en un solo sitio.
+	return is_multisite() ? 'manage_network_plugins' : 'manage_options';
 }
 
 /** URL de la pantalla de Upgravo (del sitio o de la red, según el modo). */
@@ -136,7 +141,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 } );
 
 function phpready_target_versions() {
-	return array( '8.1', '8.2', '8.3', '8.4' );
+	return array( '8.1', '8.2', '8.3', '8.4', '8.5' );
 }
 
 /** "8.1" a partir de "8.1.29". */
