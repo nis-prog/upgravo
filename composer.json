@@ -1,6 +1,6 @@
 {
     "name": "nicolassalinas/upgravo",
-    "description": "Upgravo – PHP Compatibility Check for WordPress",
+    "description": "Upgravo – PHP Version Compatibility Checker for WordPress",
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
     "require": {

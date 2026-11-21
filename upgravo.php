@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Upgravo – PHP Compatibility Check
+ * Plugin Name:       Upgravo – PHP Version Compatibility Checker
  * Description:       Scans your plugins and theme on your own server and tells you what will break before you upgrade PHP. No external service, no exec().
- * Version:           0.1.8
+ * Version:           0.1.10
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Nicolás Alejandro Salinas
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PHPREADY_VERSION', '0.1.8' );
+define( 'PHPREADY_VERSION', '0.1.10' );
 define( 'PHPREADY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PHPREADY_URL', plugin_dir_url( __FILE__ ) );
 

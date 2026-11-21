@@ -1,14 +1,14 @@
-=== Upgravo – PHP Compatibility Check ===
+=== Upgravo – PHP Version Compatibility Checker ===
 Contributors: nicolassalinas
-Tags: php compatibility, php upgrade, php 8, compatibility checker, site health
+Tags: php compatibility, compatibility checker, php upgrade, php 8, php
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.8
+Stable tag: 0.1.10
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Check PHP compatibility before you upgrade: scans plugins and theme on your own server and tells you what will break on PHP 8.x. No external service.
+Free PHP compatibility checker for WordPress: find which plugins and theme will break on PHP 8.2, 8.3, 8.4 or 8.5 before you upgrade.
 
 == Description ==
 
@@ -93,6 +93,14 @@ Yes. Upgravo Pro adds scheduled scans with an email when an update introduces an
 4. The verdict also shows up in Tools → Site Health.
 
 == Changelog ==
+
+= 0.1.10 =
+* Guard detection is now tied to the exact function, constant or class it protects. `function_exists( 'a' )` around a call to `b()` no longer hides `b()`.
+* Negated checks are understood: a call inside `if ( ! function_exists( 'x' ) )` is reported, the `else` branch is treated as guarded.
+* Guards written over several lines of an `if` condition are recognized.
+
+= 0.1.9 =
+* Plugin name and description now say what it is: a PHP version compatibility checker. No change in behaviour.
 
 = 0.1.8 =
 * PHP 8.5 can be chosen as the target version.

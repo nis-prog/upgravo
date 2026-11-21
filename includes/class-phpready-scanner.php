@@ -144,18 +144,103 @@ class PHPReady_Scanner {
 	}
 
 	/**
-	 * Lo que delata un "guard": una condición que pregunta por la versión de PHP o por la
-	 * existencia de una función/extensión/constante antes de usar lo marcado.
+	 * Comprobaciones de VERSIÓN (version_compare, PHP_VERSION...): no nombran una función, así
+	 * que valen para cualquier hallazgo de la rama, como hasta 0.1.9.
 	 */
-	const GUARD_REGEX = '/function_exists|extension_loaded|\bdefined\s*\(|class_exists|method_exists|is_callable|version_compare|PHP_VERSION|PHP_MAJOR_VERSION|PHP_MINOR_VERSION|LIBXML_VERSION|OPENSSL_VERSION/i';
+	const VERSION_GUARD_REGEX = '/version_compare|PHP_VERSION|PHP_MAJOR_VERSION|PHP_MINOR_VERSION|LIBXML_VERSION|OPENSSL_VERSION/i';
 
 	/**
-	 * Si la línea $line del archivo está dentro de un if/elseif/else/switch/case/while cuya
-	 * condición es un guard, devuelve la condición (recortada). Si no, null.
+	 * Comprobaciones de EXISTENCIA: desde 0.1.10 solo protegen lo que nombran.
+	 * function_exists('a') alrededor de b() ya no cuenta como protección de b().
+	 */
+	const EXISTS_REGEX = '/\b(function_exists|extension_loaded|defined|class_exists|interface_exists|method_exists|is_callable)\s*\(/i';
+
+	/** Nombres que menciona el hallazgo: "Function mysql_connect() is...", 'The constant "E_STRICT"...'. */
+	public static function names_in_message( $message ) {
+		$names = array();
+		if ( preg_match_all( '/([A-Za-z_][A-Za-z0-9_]*)\s*\(\)/', $message, $x ) ) {
+			$names = array_merge( $names, $x[1] );
+		}
+		if ( preg_match_all( '/["\']\\\\?([A-Za-z_][A-Za-z0-9_\\\\]*)["\']/', $message, $x ) ) {
+			$names = array_merge( $names, $x[1] );
+		}
+		if ( preg_match_all( '/\b(?:class|interface)\s+\\\\?([A-Za-z_][A-Za-z0-9_\\\\]*)/i', $message, $x ) ) {
+			$names = array_merge( $names, $x[1] );
+		}
+		return array_values( array_unique( array_map( 'strtolower', $names ) ) );
+	}
+
+	/** ¿La comprobación de existencia $kind( '$arg' ) se refiere a alguno de los nombres marcados? */
+	private static function guard_matches( $kind, $arg, array $names ) {
+		$arg = strtolower( ltrim( $arg, '\\' ) );
+		if ( '' === $arg ) {
+			return false;
+		}
+		foreach ( $names as $n ) {
+			if ( $n === $arg ) {
+				return true;
+			}
+			// extension_loaded('mcrypt') protege mcrypt_encrypt(); el mensaje de extensión dice 'mysql_'.
+			if ( 'extension_loaded' === $kind && ( 0 === strpos( $n, rtrim( $arg, '_' ) . '_' ) || rtrim( $n, '_' ) === $arg ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Lee una condición. Devuelve null si no protege lo marcado, o
+	 * array( 'positive' => true|false|null ):
+	 *   true  la rama del if corre solo si lo marcado existe (function_exists('x') ...);
+	 *   false está negada (! function_exists('x')): la rama protegida es la del else;
+	 *   null  comprobación de versión: vale para cualquier rama.
+	 */
+	private static function analyze_condition( $cond, array $names ) {
+		if ( $names && preg_match_all( self::EXISTS_REGEX, $cond, $mm, PREG_OFFSET_CAPTURE ) ) {
+			$len = strlen( $cond );
+			foreach ( $mm[0] as $k => $hit ) {
+				$kind  = strtolower( $mm[1][ $k ][0] );
+				$start = $hit[1];
+				$open  = $start + strlen( $hit[0] ) - 1;
+				$depth = 0;
+				$close = null;
+				for ( $i = $open; $i < $len; $i++ ) {
+					if ( '(' === $cond[ $i ] ) {
+						$depth++;
+					} elseif ( ')' === $cond[ $i ] && 0 === --$depth ) {
+						$close = $i;
+						break;
+					}
+				}
+				if ( null === $close || ! preg_match_all( '/["\']([^"\']+)["\']/', substr( $cond, $open + 1, $close - $open - 1 ), $lit ) ) {
+					continue;
+				}
+				if ( ! self::guard_matches( $kind, end( $lit[1] ), $names ) ) {
+					continue;
+				}
+				$before  = substr( $cond, 0, $start );
+				$after   = (string) substr( $cond, $close + 1 );
+				$negated = preg_match( '/(?:!|\bfalse\s*===?)\s*\(*\s*$/i', $before )
+					|| preg_match( '/^\s*\)*\s*(?:===?\s*false\b|!==?\s*true\b)/i', $after );
+				return array( 'positive' => ! $negated );
+			}
+		}
+		if ( preg_match( self::VERSION_GUARD_REGEX, $cond ) ) {
+			return array( 'positive' => null );
+		}
+		return null;
+	}
+
+	/**
+	 * Si el hallazgo $message de la línea $line está protegido por una comprobación que se
+	 * refiere a ESA función/constante/clase (o por una de versión), devuelve la condición
+	 * recortada. Si no, null. Se mira por hallazgo y por rama: otra llamada igual en el mismo
+	 * archivo sin protección se sigue mostrando.
 	 * Se llama mientras el archivo todavía está tokenizado, así que es gratis.
 	 */
-	public static function guard_for_line( $file, $line ) {
+	public static function guard_for_line( $file, $line, $message = '' ) {
 		$tokens = $file->getTokens();
+		$names  = self::names_in_message( $message );
 		$ptr    = null;
 		foreach ( $tokens as $i => $t ) {
 			if ( $t['line'] === $line ) {
@@ -170,29 +255,55 @@ class PHPReady_Scanner {
 			return null;
 		}
 
-		// Caso 1: la propia línea es un if(...) con guard (el hallazgo está en la condición).
+		// Caso 1: el hallazgo está en la misma línea que la comprobación.
 		$line_text = '';
 		for ( $j = $ptr; isset( $tokens[ $j ] ) && $tokens[ $j ]['line'] === $line; $j++ ) {
 			$line_text .= $tokens[ $j ]['content'];
 		}
-		if ( preg_match( '/^\s*(if|elseif|\}?\s*else\s*if|while|case|switch)\b/', $line_text ) && preg_match( self::GUARD_REGEX, $line_text ) ) {
-			return trim( substr( $line_text, 0, 80 ) );
-		}
-		// Caso 1b: guard en la misma línea con cortocircuito: $x = function_exists('f') && f();  /  defined('C') ? C : 0
-		if ( preg_match( self::GUARD_REGEX, $line_text ) && preg_match( '/&&|\|\||\?|\band\b|\bor\b/', $line_text ) ) {
-			return trim( substr( $line_text, 0, 80 ) );
+		$a = self::analyze_condition( $line_text, $names );
+		if ( $a ) {
+			$is_cond = preg_match( '/^\s*(if|elseif|\}?\s*else\s*if|while|case|switch)\b/', $line_text );
+			$and     = preg_match( '/&&|\?|\band\b/i', $line_text );
+			$or      = preg_match( '/\|\||\bor\b/i', $line_text );
+			// function_exists('f') && f()  ·  ! function_exists('f') || f()  ·  if ( function_exists('f') ) { f(); }
+			if ( ( null === $a['positive'] && ( $is_cond || $and || $or ) )
+				|| ( true === $a['positive'] && ( $is_cond || $and ) )
+				|| ( false === $a['positive'] && $or ) ) {
+				return trim( substr( $line_text, 0, 80 ) );
+			}
 		}
 
-		// Caso 2: alguna de las condiciones que envuelven el token es un guard.
+		// Caso 1c: el hallazgo está dentro de la condición de un if que ocupa varias líneas:
+		// if ( defined( 'C' )
+		//      && ... C ) {
+		if ( isset( $tokens[ $ptr ]['nested_parenthesis'] ) ) {
+			foreach ( $tokens[ $ptr ]['nested_parenthesis'] as $po => $pc ) {
+				$owner = $tokens[ $po ]['parenthesis_owner'] ?? null;
+				if ( null === $owner || ! in_array( $tokens[ $owner ]['code'], array( T_IF, T_ELSEIF, T_WHILE ), true ) ) {
+					continue;
+				}
+				$cond = preg_replace( '/\s+/', ' ', $file->getTokensAsString( $po, $pc - $po + 1 ) );
+				$a    = self::analyze_condition( $cond, $names );
+				if ( $a && ( null === $a['positive']
+					|| ( true === $a['positive'] && preg_match( '/&&|\band\b/i', $cond ) )
+					|| ( false === $a['positive'] && preg_match( '/\|\||\bor\b/i', $cond ) ) ) ) {
+					return trim( substr( $cond, 0, 80 ) );
+				}
+			}
+		}
+
+		// Caso 2: alguna de las condiciones que envuelven el token, en la rama correcta.
 		$conds = isset( $tokens[ $ptr ]['conditions'] ) ? array_reverse( $tokens[ $ptr ]['conditions'], true ) : array();
 		foreach ( $conds as $cond_ptr => $code ) {
 			if ( ! in_array( $code, array( T_IF, T_ELSEIF, T_ELSE, T_SWITCH, T_CASE, T_WHILE ), true ) ) {
 				continue;
 			}
-			$if_ptr = $cond_ptr;
+			$if_ptr  = $cond_ptr;
+			$in_else = false;
 			if ( T_ELSE === $code ) {
-				// El guard está en el if de este else.
-				$prev = $file->findPrevious( T_CLOSE_CURLY_BRACKET, $cond_ptr - 1 );
+				// La condición está en el if de este else, y lo protegido es lo contrario.
+				$in_else = true;
+				$prev    = $file->findPrevious( T_CLOSE_CURLY_BRACKET, $cond_ptr - 1 );
 				if ( $prev && isset( $tokens[ $prev ]['scope_condition'] ) ) {
 					$if_ptr = $tokens[ $prev ]['scope_condition'];
 				}
@@ -202,26 +313,39 @@ class PHPReady_Scanner {
 					$if_ptr = $sw;
 				}
 			}
-			if ( isset( $tokens[ $if_ptr ]['parenthesis_opener'], $tokens[ $if_ptr ]['parenthesis_closer'] ) ) {
-				$o    = $tokens[ $if_ptr ]['parenthesis_opener'];
-				$c    = $tokens[ $if_ptr ]['parenthesis_closer'];
-				$cond = $file->getTokensAsString( $o, $c - $o + 1 );
-				if ( preg_match( self::GUARD_REGEX, $cond ) ) {
-					return trim( preg_replace( '/\s+/', ' ', substr( $cond, 0, 80 ) ) );
-				}
-				// Guard guardado en una variable: if ( $existe ) ... donde antes hubo $existe = function_exists(...)
-				if ( preg_match_all( '/\$\w+/', $cond, $vars ) ) {
-					foreach ( array_unique( $vars[0] ) as $var ) {
-						if ( '$this' === $var ) {
-							continue;
+			if ( ! isset( $tokens[ $if_ptr ]['parenthesis_opener'], $tokens[ $if_ptr ]['parenthesis_closer'] ) ) {
+				continue;
+			}
+			$o    = $tokens[ $if_ptr ]['parenthesis_opener'];
+			$c    = $tokens[ $if_ptr ]['parenthesis_closer'];
+			$cond = preg_replace( '/\s+/', ' ', $file->getTokensAsString( $o, $c - $o + 1 ) );
+			$text = $cond;
+			$a    = self::analyze_condition( $cond, $names );
+			// Guard guardado en una variable: $existe = function_exists('f'); if ( $existe ) { f(); }
+			if ( ! $a && preg_match_all( '/\$\w+/', $cond, $vars ) ) {
+				foreach ( array_unique( $vars[0] ) as $var ) {
+					if ( '$this' === $var ) {
+						continue;
+					}
+					$assign = self::find_assignment( $file, $var, $if_ptr );
+					$a      = $assign ? self::analyze_condition( $assign, $names ) : null;
+					if ( $a ) {
+						if ( null !== $a['positive'] && preg_match( '/!\s*\(*\s*' . preg_quote( $var, '/' ) . '\b/', $cond ) ) {
+							$a['positive'] = ! $a['positive'];
 						}
-						$assign = self::find_assignment( $file, $var, $if_ptr );
-						if ( $assign && preg_match( self::GUARD_REGEX, $assign ) ) {
-							return trim( substr( $var . ' = ' . $assign, 0, 80 ) );
-						}
+						$text = $var . ' = ' . $assign;
+						break;
 					}
 				}
 			}
+			if ( ! $a ) {
+				continue;
+			}
+			if ( null === $a['positive'] || ( $in_else ? ! $a['positive'] : $a['positive'] ) ) {
+				return trim( substr( $text, 0, 80 ) );
+			}
+			// Rama equivocada (if ( ! function_exists('f') ) { f(); }): esta condición no la
+			// protege; seguimos mirando las de afuera.
 		}
 		return null;
 	}
@@ -379,12 +503,8 @@ class PHPReady_Scanner {
 				$out['errors']   += $file->getErrorCount();
 				$out['warnings'] += $file->getWarningCount();
 
-				$guard_cache = array();
 				foreach ( array( 'E' => $file->getErrors(), 'W' => $file->getWarnings() ) as $type => $lines ) {
 					foreach ( $lines as $line => $cols ) {
-						if ( ! isset( $guard_cache[ $line ] ) ) {
-							$guard_cache[ $line ] = self::guard_for_line( $file, $line );
-						}
 						foreach ( $cols as $msgs ) {
 							foreach ( $msgs as $m ) {
 								$out['messages'][] = array(
@@ -393,7 +513,7 @@ class PHPReady_Scanner {
 									'type'    => $type,
 									'source'  => $m['source'],
 									'message' => $m['message'],
-									'guard'   => $guard_cache[ $line ],
+									'guard'   => self::guard_for_line( $file, $line, $m['message'] ),
 								);
 							}
 						}
