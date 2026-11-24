@@ -13,6 +13,7 @@ class PHPReady_Extras {
 	public static function init() {
 		add_action( 'admin_post_phpready_csv', array( __CLASS__, 'csv' ) );
 		add_filter( 'site_status_tests', array( __CLASS__, 'site_health_register' ) );
+		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugins_screen_meta' ), 20, 2 );
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			WP_CLI::add_command( 'upgravo scan', array( __CLASS__, 'cli' ) );
 		}
@@ -61,6 +62,152 @@ class PHPReady_Extras {
 			return ( $cb['deprecated'] <=> $ca['deprecated'] ) ?: strcasecmp( $a['item']['name'], $b['item']['name'] );
 		} );
 		return $rows;
+	}
+
+	/** evaluate() del último escaneo terminado, una sola vez por petición. */
+	public static function last_rows() {
+		static $memo = null;
+		if ( null === $memo ) {
+			$job  = PHPReady_Job::get();
+			$memo = ( $job && 'done' === $job['status'] ) ? array( 'job' => $job, 'rows' => self::evaluate( $job ) ) : false;
+		}
+		return $memo;
+	}
+
+	// ------------------------------------------------------ Pantalla Plugins
+
+	/**
+	 * En la pantalla Plugins, debajo de cada plugin escaneado: "PHP 8.4: 2 breaks" con enlace a su
+	 * detalle en Upgravo. Si el plugin cambió de versión desde el escaneo, lo dice.
+	 */
+	public static function plugins_screen_meta( $links, $file ) {
+		if ( ! is_admin() || ! current_user_can( phpready_cap() ) ) {
+			return $links;
+		}
+		$last = self::last_rows();
+		if ( ! $last ) {
+			return $links;
+		}
+		foreach ( $last['rows'] as $r ) {
+			$it = $r['item'];
+			if ( 'plugin' !== $it['type'] || $it['key'] !== $file ) {
+				continue;
+			}
+			$c      = $r['filtered']['counts'];
+			$target = $last['job']['target'];
+			if ( $c['breaks'] ) {
+				$color = '#b32d2e';
+				/* translators: 1: PHP version, 2: number of problems */
+				$label = sprintf( _n( 'PHP %1$s: %2$d break', 'PHP %1$s: %2$d breaks', $c['breaks'], 'upgravo' ), $target, $c['breaks'] );
+			} elseif ( $c['deprecated'] ) {
+				$color = '#dba617';
+				/* translators: 1: PHP version, 2: number of deprecation notices */
+				$label = sprintf( _n( 'PHP %1$s: works, %2$d notice', 'PHP %1$s: works, %2$d notices', $c['deprecated'], 'upgravo' ), $target, $c['deprecated'] );
+			} elseif ( $it['skipped'] ) {
+				$color = '#996800';
+				/* translators: %s: PHP version */
+				$label = sprintf( __( 'PHP %s: not fully checked', 'upgravo' ), $target );
+			} else {
+				$color = '#00843d';
+				/* translators: %s: PHP version */
+				$label = sprintf( __( 'PHP %s: OK', 'upgravo' ), $target );
+			}
+			$extra = array();
+			if ( function_exists( 'get_plugins' ) ) {
+				$installed = get_plugins(); // WordPress la cachea: no relee los archivos en cada fila
+				if ( isset( $installed[ $file ] ) && $installed[ $file ]['Version'] !== $it['version'] ) {
+					/* translators: %s: plugin version */
+					$extra[] = sprintf( __( 'checked version %s', 'upgravo' ), $it['version'] );
+				}
+			}
+			foreach ( PHPReady_Maint::signals( $it, $target ) as $s ) {
+				$extra[] = $s['text'];
+			}
+			$url     = phpready_page_url() . '#phpready-det-' . (int) $r['idx'];
+			$links[] = '<a href="' . esc_url( $url ) . '" style="white-space:nowrap"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:' . esc_attr( $color ) . '"></span> ' . esc_html( $label ) . '</a>'
+				. ( $extra ? ' <span style="color:#646970">· ' . esc_html( implode( ' · ', $extra ) ) . '</span>' : '' );
+			break;
+		}
+		return $links;
+	}
+
+	// ---------------------------------------------------------- Resumen
+
+	/**
+	 * Resumen en texto plano para pegar en el mail al cliente o en el ticket del hosting.
+	 * Sale en el idioma del administrador.
+	 */
+	public static function summary_text( array $job, array $rows, $title ) {
+		$host  = wp_parse_url( home_url(), PHP_URL_HOST );
+		$lines = array();
+		$lines[] = get_bloginfo( 'name' ) . ' (' . $host . ') · PHP ' . $job['current'] . ' → ' . $job['target'];
+		$lines[] = $title;
+		$files   = 0;
+		foreach ( $rows as $r ) {
+			$files += $r['item']['total'];
+		}
+		/* translators: 1: date, 2: number of plugins and themes, 3: number of files */
+		$lines[] = sprintf( __( 'Checked on %1$s with Upgravo (static code analysis): %2$d plugins and themes, %3$d PHP files.', 'upgravo' ), wp_date( get_option( 'date_format' ), $job['finished'] ), count( $rows ), $files );
+
+		$name = function ( $it ) {
+			return trim( $it['name'] . ' ' . $it['version'] ) . ( $it['active'] ? '' : ' (' . __( 'inactive', 'upgravo' ) . ')' );
+		};
+		$breaks = array();
+		$notes  = array();
+		$part   = array();
+		$maint  = array();
+		$ok     = array();
+		foreach ( $rows as $r ) {
+			$it = $r['item'];
+			$c  = $r['filtered']['counts'];
+			if ( $c['breaks'] ) {
+				/* translators: %d: number of problems */
+				$l = '- ' . $name( $it ) . ': ' . sprintf( _n( '%d problem', '%d problems', $c['breaks'], 'upgravo' ), $c['breaks'] );
+				if ( ! empty( $it['update'] ) ) {
+					/* translators: %s: plugin version */
+					$l .= ' · ' . sprintf( __( 'update available: %s', 'upgravo' ), $it['update'] );
+				}
+				$breaks[] = $l;
+			} elseif ( $c['deprecated'] ) {
+				$notes[] = '- ' . $name( $it ) . ': ' . (int) $c['deprecated'];
+			} elseif ( ! $it['skipped'] ) {
+				$ok[] = $it['name'];
+			}
+			if ( $it['skipped'] ) {
+				/* translators: %d: number of files */
+				$part[] = '- ' . $name( $it ) . ': ' . sprintf( _n( '%d file not checked', '%d files not checked', count( $it['skipped'] ), 'upgravo' ), count( $it['skipped'] ) );
+			}
+			foreach ( PHPReady_Maint::signals( $it, $job['target'] ) as $s ) {
+				$maint[] = '- ' . $it['name'] . ': ' . $s['text'];
+			}
+		}
+		$block = function ( $head, $list ) use ( &$lines ) {
+			if ( $list ) {
+				$lines[] = '';
+				$lines[] = $head;
+				foreach ( $list as $l ) {
+					$lines[] = $l;
+				}
+			}
+		};
+		/* translators: %s: PHP version */
+		$block( sprintf( __( 'Breaks on PHP %s (fatal errors):', 'upgravo' ), $job['target'] ), $breaks );
+		$block( __( 'Deprecation notices (the code still runs):', 'upgravo' ), $notes );
+		$block( __( 'Could not be fully checked:', 'upgravo' ), $part );
+		$block( __( 'Maintenance:', 'upgravo' ), $maint );
+		if ( $ok ) {
+			$lines[] = '';
+			$lines[] = __( 'No problems found:', 'upgravo' ) . ' ' . implode( ', ', $ok );
+		}
+		$steps = self::next_steps( $rows, $job['target'] );
+		if ( $steps ) {
+			$lines[] = '';
+			$lines[] = __( 'What to do first', 'upgravo' ) . ':';
+			foreach ( $steps as $i => $s ) {
+				$lines[] = ( $i + 1 ) . '. ' . $s;
+			}
+		}
+		return implode( "\n", $lines );
 	}
 
 	/** "Qué hacer primero": lista corta y accionable, derivada de los datos. */

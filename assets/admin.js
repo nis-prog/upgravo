@@ -70,7 +70,8 @@
 			var btn = form.querySelector('button, input[type=submit]');
 			btn.disabled = true;
 			var inact = form.querySelector('[name=phpready_inactive]');
-			post('phpready_start', { target: form.querySelector('[name=phpready_target]').value, inactive: (inact && inact.checked) ? 1 : 0 })
+			var worg = form.querySelector('[name=phpready_wporg]');
+			post('phpready_start', { target: form.querySelector('[name=phpready_target]').value, inactive: (inact && inact.checked) ? 1 : 0, wporg: (worg && worg.checked) ? 1 : 0 })
 				.then(function () {
 					show({ item_name: '…', item_num: 1, items: '?', index: 0, total: 0 });
 					step(0);
@@ -98,6 +99,43 @@
 		step(0);
 	}
 
+	// Copiar el resumen en texto plano (para el mail al cliente o el ticket del hosting).
+	var btnCopy = document.getElementById('phpready-copy');
+	var summary = document.getElementById('phpready-summary');
+	if (btnCopy && summary) {
+		btnCopy.addEventListener('click', function () {
+			var label = btnCopy.textContent;
+			var done = function () {
+				btnCopy.textContent = PHPReady.i18n.copied;
+				setTimeout(function () { btnCopy.textContent = label; }, 2000);
+			};
+			var fallback = function () {
+				summary.style.display = '';
+				summary.focus();
+				summary.select();
+				try { if (document.execCommand('copy')) { done(); } } catch (e) {}
+			};
+			if (navigator.clipboard && window.isSecureContext) {
+				navigator.clipboard.writeText(summary.value).then(done, fallback);
+			} else {
+				fallback();
+			}
+		});
+	}
+
+	// Consulta opcional a WordPress.org: de a pocos plugins por pedido; al terminar recarga una vez.
+	if (PHPReady.wporg > 0 && !PHPReady.resume) {
+		var st = document.getElementById('phpready-wporg-status');
+		if (st) { st.textContent = PHPReady.i18n.checking; }
+		var guard = 0;
+		var more = function () {
+			post('phpready_wporg').then(function (d) {
+				if (d.left > 0 && ++guard < 50) { more(); } else { window.location.reload(); }
+			}).catch(function () { if (st) { st.textContent = ''; } });
+		};
+		more();
+	}
+
 	// Filas de detalle: clic en la fila del plugin abre/cierra su detalle.
 	document.querySelectorAll('tr.phpready-row').forEach(function (row) {
 		row.addEventListener('click', function (ev) {
@@ -106,4 +144,15 @@
 			if (det) { det.style.display = det.style.display === 'none' ? '' : 'none'; }
 		});
 	});
+
+	// Enlace desde la pantalla Plugins (#phpready-det-N): abre ese detalle y lo muestra.
+	if (location.hash.indexOf('#phpready-det-') === 0) {
+		var det = document.getElementById(location.hash.slice(1));
+		var row = det ? document.querySelector('tr.phpready-row[data-detail="' + det.id + '"]') : null;
+		if (det && row) {
+			det.style.display = '';
+			row.scrollIntoView({ block: 'center' });
+			row.style.outline = '2px solid #2271b1';
+		}
+	}
 })();

@@ -323,6 +323,9 @@ class PHPReady_Job {
 			wp_send_json_error( 'invalid version' );
 		}
 
+		if ( isset( $_POST['wporg'] ) ) {
+			PHPReady_Maint::set_enabled( ! empty( $_POST['wporg'] ) );
+		}
 		$job = self::new_job( $target, ! empty( $_POST['inactive'] ) );
 		self::save( $job );
 		wp_send_json_success( array( 'items' => count( $job['items'] ) ) );

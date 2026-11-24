@@ -14,6 +14,10 @@ Scans the plugins and theme of a WordPress site **on its own server** and tells 
 - Scans active plugins, the active theme (and parent), must-use plugins and drop-ins in short batches, so it works on shared hosting.
 - Gives a verdict and a "What to do first" list: what **breaks**, what only raises **deprecation notices**, and what was **hidden** as a false positive (with the reason).
 - Separates third-party libraries bundled inside a plugin from the plugin's own code.
+- Shows each plugin's result on the Plugins screen ("PHP 8.4: OK", "works, 12 notices" or "3 breaks").
+- Explains how to fix the most common findings, with a before/after code example.
+- Flags plugins not tested with recent WordPress versions; optionally checks on WordPress.org whether a plugin was closed or abandoned (off by default).
+- Copies a plain-text summary for a client email or a hosting ticket.
 - Exports a CSV, adds the verdict to Tools → Site Health, and includes a WP-CLI command: `wp upgravo scan`.
 
 ## Screenshots
@@ -22,6 +26,7 @@ Scans the plugins and theme of a WordPress site **on its own server** and tells 
 |---|---|
 | ![Verdict](.wordpress-org/screenshot-1.png) | ![Details](.wordpress-org/screenshot-2.png) |
 | ![Progress](.wordpress-org/screenshot-3.png) | ![Site Health](.wordpress-org/screenshot-4.png) |
+| ![Plugins screen](.wordpress-org/screenshot-5.png) | ![Summary](.wordpress-org/screenshot-6.png) |
 
 ## Building from source
 

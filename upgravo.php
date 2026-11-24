@@ -1,8 +1,9 @@
 <?php
 /**
  * Plugin Name:       Upgravo – PHP Version Compatibility Checker
+ * Plugin URI:        https://phpready.com/
  * Description:       Scans your plugins and theme on your own server and tells you what will break before you upgrade PHP. No external service, no exec().
- * Version:           0.1.10
+ * Version:           0.1.11
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Nicolás Alejandro Salinas
@@ -17,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PHPREADY_VERSION', '0.1.10' );
+define( 'PHPREADY_VERSION', '0.1.11' );
 define( 'PHPREADY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PHPREADY_URL', plugin_dir_url( __FILE__ ) );
 
@@ -26,9 +27,12 @@ require_once PHPREADY_DIR . 'includes/class-phpready-classes.php';
 require_once PHPREADY_DIR . 'includes/class-phpready-filter.php';
 require_once PHPREADY_DIR . 'includes/class-phpready-job.php';
 require_once PHPREADY_DIR . 'includes/class-phpready-extras.php';
+require_once PHPREADY_DIR . 'includes/class-phpready-maint.php';
+require_once PHPREADY_DIR . 'includes/class-phpready-fixes.php';
 
 PHPReady_Job::init();
 PHPReady_Extras::init();
+PHPReady_Maint::init();
 
 /**
  * Review request: shown only on the Upgravo screen, after a finished scan, to users who can run scans.
@@ -133,9 +137,12 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 		'ajaxurl' => admin_url( 'admin-ajax.php' ),
 		'nonce'   => wp_create_nonce( 'phpready_ajax' ),
 		'resume'  => $resume,
+		'wporg'   => count( PHPReady_Maint::pending( $job ) ),
 		'i18n'    => array(
-			'files' => __( 'files', 'upgravo' ),
-			'error' => __( 'Error:', 'upgravo' ),
+			'files'    => __( 'files', 'upgravo' ),
+			'error'    => __( 'Error:', 'upgravo' ),
+			'copied'   => __( 'Copied', 'upgravo' ),
+			'checking' => __( 'Checking WordPress.org…', 'upgravo' ),
 		),
 	) );
 } );
@@ -208,6 +215,9 @@ function phpready_render_page() {
 				&nbsp;&nbsp;
 				<label><input type="checkbox" name="phpready_inactive" value="1" <?php checked( ! empty( $job['inactive'] ) ); ?>> <?php esc_html_e( 'Include inactive plugins', 'upgravo' ); ?></label>
 			</p>
+			<p style="margin-top:-6px">
+				<label><input type="checkbox" name="phpready_wporg" value="1" <?php checked( PHPReady_Maint::enabled() ); ?>> <?php esc_html_e( 'Also check on WordPress.org whether each plugin is still maintained (sends the plugin folder names to api.wordpress.org)', 'upgravo' ); ?></label>
+			</p>
 		</form>
 		<?php
 		/**
@@ -272,7 +282,10 @@ function phpready_render_page() {
 				<span style="color:#996800"><?php esc_html_e( 'Notices:', 'upgravo' ); ?> <?php echo (int) $tot['deprecated']; ?></span> &nbsp;·&nbsp;
 				<span style="color:#646970"><?php esc_html_e( 'Hidden:', 'upgravo' ); ?> <?php echo (int) $tot['hidden']; ?></span>
 				&nbsp;&nbsp; <a class="button" href="<?php echo esc_url( $csv_url ); ?>"><?php esc_html_e( 'Download CSV', 'upgravo' ); ?></a>
+				<button type="button" class="button" id="phpready-copy"><?php esc_html_e( 'Copy summary', 'upgravo' ); ?></button>
+				<span id="phpready-wporg-status" class="description"></span>
 			</p>
+			<textarea id="phpready-summary" readonly rows="14" style="display:none;width:100%;max-width:1100px;font-family:monospace;font-size:12px"><?php echo esc_textarea( PHPReady_Extras::summary_text( $job, $rows, $titles[ $verdict ] ) ); ?></textarea>
 			<p class="description">
 				<?php
 				/* translators: 1: number of items, 2: number of files, 3: seconds, 4: number of batches, 5: peak memory in MB, 6: date */
@@ -333,6 +346,7 @@ function phpready_render_page() {
 							<?php if ( 'theme' === $it['type'] ) : ?><span class="description">(<?php esc_html_e( 'theme', 'upgravo' ); ?>)</span><?php endif; ?>
 							<?php if ( ! $it['active'] ) : ?><span class="description">(<?php esc_html_e( 'inactive', 'upgravo' ); ?>)</span><?php endif; ?>
 							<?php if ( ! empty( $it['update'] ) ) : ?><br><small style="color:#2271b1"><?php esc_html_e( 'Update available:', 'upgravo' ); ?> <?php echo esc_html( $it['update'] ); ?></small><?php endif; ?>
+							<?php foreach ( PHPReady_Maint::signals( $it, $job['target'] ) as $sig ) : ?><br><small style="color:<?php echo 'closed' === $sig['code'] ? '#b32d2e' : '#996800'; ?>"><?php echo esc_html( $sig['text'] ); ?></small><?php endforeach; ?>
 						</td>
 						<td><?php echo $light; // phpcs:ignore ?></td>
 						<td><?php echo $c['breaks'] ? '<strong style="color:#b32d2e">' . (int) $c['breaks'] . '</strong>' : '—'; ?></td>
@@ -371,6 +385,7 @@ function phpready_render_page() {
 										<div style="padding:4px 0 4px 24px;font-family:monospace;font-size:12px">
 											<?php echo esc_html( implode( ' · ', array_unique( $g['places'] ) ) ); ?>
 										</div>
+										<?php PHPReady_Fixes::render( $g['source'] ); ?>
 										<?php
 										/**
 										 * Actions for one visible group of findings (the Pro version adds "mark as reviewed").

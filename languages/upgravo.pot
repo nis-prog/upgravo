@@ -1,313 +1,406 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Upgravo 0.1.9\n"
+"Project-Id-Version: Upgravo 0.1.7\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: upgravo\n"
 
-#: upgravo.php:47
+#: upgravo.php:51
 msgid "Sorry, you are not allowed to do that."
 msgstr ""
 
-#: upgravo.php:106
+#: upgravo.php:110
 msgid "Pro version"
 msgstr ""
 
-#: upgravo.php:137
+#: upgravo.php:142
 msgid "files"
 msgstr ""
 
-#: upgravo.php:138
+#: upgravo.php:143
 msgid "Error:"
 msgstr ""
 
-#: upgravo.php:199
+#: upgravo.php:144
+msgid "Copied"
+msgstr ""
+
+#: upgravo.php:145
+msgid "Checking WordPress.org…"
+msgstr ""
+
+#: upgravo.php:206
 msgid "Current PHP:"
 msgstr ""
 
-#: upgravo.php:200
+#: upgravo.php:207
 msgid "check for PHP"
 msgstr ""
 
-#: upgravo.php:207
+#: upgravo.php:214
 msgid "Scan again"
 msgstr ""
 
-#: upgravo.php:207
+#: upgravo.php:214
 msgid "Scan plugins and theme"
 msgstr ""
 
-#: upgravo.php:209
+#: upgravo.php:216
 msgid "Include inactive plugins"
 msgstr ""
 
-#: upgravo.php:223
+#: upgravo.php:219
+msgid "Also check on WordPress.org whether each plugin is still maintained (sends the plugin folder names to api.wordpress.org)"
+msgstr ""
+
+#: upgravo.php:233
 msgid "Upgravo Pro adds scheduled scans with email alerts, a PDF report for clients, a whitelist of false positives and multisite."
 msgstr ""
 
-#: upgravo.php:224
+#: upgravo.php:234
 msgid "Get Pro"
 msgstr ""
 
-#: upgravo.php:234
+#: upgravo.php:244
 msgid "Cancel"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:258
+#: upgravo.php:268
 msgid "Ready for PHP %s: nothing breaks"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:260
+#: upgravo.php:270
 msgid "Ready for PHP %s: nothing breaks, with deprecation notices"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:262
+#: upgravo.php:272
 msgid "PHP %s: nothing breaks in what was analyzed, but some files could not be checked"
 msgstr ""
 
 #. translators: %s: PHP version
-#: upgravo.php:264
+#: upgravo.php:274
 msgid "Not yet: something active breaks on PHP %s"
 msgstr ""
 
-#: upgravo.php:271
+#: upgravo.php:281
 msgid "Breaks:"
 msgstr ""
 
-#: upgravo.php:272
+#: upgravo.php:282
 msgid "Notices:"
 msgstr ""
 
-#: upgravo.php:273
+#: upgravo.php:283
 msgid "Hidden:"
 msgstr ""
 
-#: upgravo.php:274
+#: upgravo.php:284
 msgid "Download CSV"
 msgstr ""
 
+#: upgravo.php:285
+msgid "Copy summary"
+msgstr ""
+
 #. translators: 1: number of items, 2: number of files, 3: seconds, 4: number of batches, 5: peak memory in MB, 6: date
-#: upgravo.php:279
+#: upgravo.php:292
 msgid "%1$d items · %2$d files · %3$d s in %4$d batches · peak memory %5$s MB · %6$s"
 msgstr ""
 
-#: upgravo.php:285
+#: upgravo.php:298 includes/class-phpready-extras.php:205
 msgid "What to do first"
 msgstr ""
 
-#: upgravo.php:299
+#: upgravo.php:312
 msgid "Was this scan useful? A short review on WordPress.org helps other site owners find Upgravo."
 msgstr ""
 
-#: upgravo.php:300
+#: upgravo.php:313
 msgid "Leave a review"
 msgstr ""
 
-#: upgravo.php:301
+#: upgravo.php:314
 msgid "Maybe later"
 msgstr ""
 
-#: upgravo.php:302
+#: upgravo.php:315
 msgid "Don't ask again"
 msgstr ""
 
-#: upgravo.php:309
+#: upgravo.php:322
 msgid "Plugin / theme"
 msgstr ""
 
-#: upgravo.php:310
+#: upgravo.php:323
 msgid "Status"
 msgstr ""
 
-#: upgravo.php:311 upgravo.php:323
+#: upgravo.php:324 upgravo.php:336
 msgid "Breaks"
 msgstr ""
 
-#: upgravo.php:312 upgravo.php:325
+#: upgravo.php:325 upgravo.php:338
 msgid "Notices"
 msgstr ""
 
-#: upgravo.php:313 upgravo.php:388
+#: upgravo.php:326 upgravo.php:403
 msgid "Hidden"
 msgstr ""
 
-#: upgravo.php:314
+#: upgravo.php:327
 msgid "Files"
 msgstr ""
 
-#: upgravo.php:327
+#: upgravo.php:340
 msgid "OK"
 msgstr ""
 
-#: upgravo.php:333
+#: upgravo.php:346
 msgid "theme"
 msgstr ""
 
-#: upgravo.php:334 includes/class-phpready-extras.php:75
+#: upgravo.php:347 includes/class-phpready-extras.php:153 includes/class-phpready-extras.php:222
 msgid "inactive"
 msgstr ""
 
-#: upgravo.php:335
+#: upgravo.php:348
 msgid "Update available:"
 msgstr ""
 
 #. translators: %d: number of files
-#: upgravo.php:341
+#: upgravo.php:355
 msgid "%d not checked"
 msgstr ""
 
 #. translators: 1: number of findings in bundled libraries, 2: total visible findings
-#: upgravo.php:353
+#: upgravo.php:367
 msgid "%1$d of %2$d are in third-party libraries bundled with the plugin (vendor, node_modules…): the author fixes those by updating the library, not their own code."
 msgstr ""
 
-#: upgravo.php:357
+#: upgravo.php:371
 msgid "Not checked:"
 msgstr ""
 
-#: upgravo.php:366 includes/class-phpready-extras.php:134
+#: upgravo.php:380 includes/class-phpready-extras.php:281
 msgid "BREAKS"
 msgstr ""
 
-#: upgravo.php:366 includes/class-phpready-extras.php:134
+#: upgravo.php:380 includes/class-phpready-extras.php:281
 msgid "NOTICE"
 msgstr ""
 
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:109
+msgid "PHP %s: not fully checked"
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:113
+msgid "PHP %s: OK"
+msgstr ""
+
+#. translators: %s: plugin version
+#: includes/class-phpready-extras.php:120
+msgid "checked version %s"
+msgstr ""
+
+#. translators: 1: date, 2: number of plugins and themes, 3: number of files
+#: includes/class-phpready-extras.php:150
+msgid "Checked on %1$s with Upgravo (static code analysis): %2$d plugins and themes, %3$d PHP files."
+msgstr ""
+
+#. translators: %s: plugin version
+#: includes/class-phpready-extras.php:168
+msgid "update available: %s"
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:194
+msgid "Breaks on PHP %s (fatal errors):"
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:195
+msgid "Deprecation notices (the code still runs):"
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:196
+msgid "Could not be fully checked:"
+msgstr ""
+
+#. translators: %s: PHP version
+#: includes/class-phpready-extras.php:197
+msgid "Maintenance:"
+msgstr ""
+
+#: includes/class-phpready-extras.php:200
+msgid "No problems found:"
+msgstr ""
+
 #. translators: 1: plugin name, 2: new version, 3: PHP version
-#: includes/class-phpready-extras.php:78
+#: includes/class-phpready-extras.php:225
 msgid "Update %1$s to version %2$s and scan again: the installed version breaks on PHP %3$s."
 msgstr ""
 
 #. translators: 1: plugin name, 2: PHP version
-#: includes/class-phpready-extras.php:81
+#: includes/class-phpready-extras.php:228
 msgid "%1$s breaks on PHP %2$s but is inactive: it has no effect until activated. If unused, delete it."
 msgstr ""
 
 #. translators: 1: plugin name, 2: PHP version
-#: includes/class-phpready-extras.php:84
+#: includes/class-phpready-extras.php:231
 msgid "%1$s breaks on PHP %2$s and has no update available: find a replacement or ask the author for a compatible version before upgrading."
 msgstr ""
 
 #. translators: 1: plugin name, 2: number of files
-#: includes/class-phpready-extras.php:90
+#: includes/class-phpready-extras.php:237
 msgid "%1$s: %2$d file(s) could not be analyzed (too big for the memory limit, a syntax error on the current PHP, or the server aborted the request). The verdict does not cover them: expand the row to see which ones and why."
 msgstr ""
 
-#: includes/class-phpready-extras.php:117
+#: includes/class-phpready-extras.php:264
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: includes/class-phpready-extras.php:122
+#: includes/class-phpready-extras.php:269
 msgid "There is no scan result to export."
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Item"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Version"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Active"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Category"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "File"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Line"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Bundled library"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Message"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Rule"
 msgstr ""
 
-#: includes/class-phpready-extras.php:127
+#: includes/class-phpready-extras.php:274
 msgid "Hidden reason"
 msgstr ""
 
-#: includes/class-phpready-extras.php:133 includes/class-phpready-extras.php:137
+#: includes/class-phpready-extras.php:280 includes/class-phpready-extras.php:284
 msgid "yes"
 msgstr ""
 
-#: includes/class-phpready-extras.php:133 includes/class-phpready-extras.php:137
+#: includes/class-phpready-extras.php:280 includes/class-phpready-extras.php:284
 msgid "no"
 msgstr ""
 
-#: includes/class-phpready-extras.php:134
+#: includes/class-phpready-extras.php:281
 msgid "hidden"
 msgstr ""
 
-#: includes/class-phpready-extras.php:167
+#: includes/class-phpready-extras.php:314
 msgid "PHP upgrade readiness"
 msgstr ""
 
-#: includes/class-phpready-extras.php:176
+#: includes/class-phpready-extras.php:323
 msgid "Compatibility with a newer PHP version has not been checked yet"
 msgstr ""
 
-#: includes/class-phpready-extras.php:179
+#: includes/class-phpready-extras.php:326
 msgid "Scan plugins and theme before raising the PHP version on your hosting."
 msgstr ""
 
-#: includes/class-phpready-extras.php:180
+#: includes/class-phpready-extras.php:327
 msgid "Go to Upgravo"
 msgstr ""
 
 #. translators: 1: PHP version, 2: date
-#: includes/class-phpready-extras.php:194
+#: includes/class-phpready-extras.php:341
 msgid "The site is ready for PHP %1$s (checked on %2$s)"
 msgstr ""
 
 #. translators: 1: PHP version, 2: date
-#: includes/class-phpready-extras.php:195
+#: includes/class-phpready-extras.php:342
 msgid "No active plugin or theme breaks."
 msgstr ""
 
 #. translators: 1: PHP version, 2: date
-#: includes/class-phpready-extras.php:200
+#: includes/class-phpready-extras.php:347
 msgid "The site is ready for PHP %1$s, with deprecation notices (checked on %2$s)"
 msgstr ""
 
 #. translators: 1: PHP version, 2: date
-#: includes/class-phpready-extras.php:201
+#: includes/class-phpready-extras.php:348
 msgid "Nothing breaks; some plugins will log deprecation notices."
 msgstr ""
 
 #. translators: %s: PHP version
-#: includes/class-phpready-extras.php:206
+#: includes/class-phpready-extras.php:353
 msgid "Incomplete check for PHP %s"
 msgstr ""
 
 #. translators: %s: PHP version
-#: includes/class-phpready-extras.php:207
+#: includes/class-phpready-extras.php:354
 msgid "Some files could not be analyzed."
 msgstr ""
 
 #. translators: 1: PHP version, 2: date
-#: includes/class-phpready-extras.php:213
+#: includes/class-phpready-extras.php:360
 msgid "Something breaks when upgrading to PHP %1$s (checked on %2$s)"
 msgstr ""
+
+#. translators: 1: PHP version, 2: number of problems
+#: includes/class-phpready-extras.php:101
+msgid "PHP %1$s: %2$d break"
+msgid_plural "PHP %1$s: %2$d breaks"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: PHP version, 2: number of deprecation notices
+#: includes/class-phpready-extras.php:105
+msgid "PHP %1$s: works, %2$d notice"
+msgid_plural "PHP %1$s: works, %2$d notices"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of problems
+#: includes/class-phpready-extras.php:165
+msgid "%d problem"
+msgid_plural "%d problems"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of files
+#: includes/class-phpready-extras.php:178
+msgid "%d file not checked"
+msgid_plural "%d files not checked"
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/class-phpready-filter.php:147
 msgid "already applies on the current PHP version"
@@ -329,6 +422,122 @@ msgstr ""
 msgid "analyzer internal"
 msgstr ""
 
+#: includes/class-phpready-fixes.php:18
+msgid "PHP 8.4: a typed parameter whose default value is null must say so in its type. Add a \"?\" before the type."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:23
+msgid "The namespace name belongs to a PHP extension. It only fails on servers where that extension is installed. It usually comes from a bundled library: updating the library (or prefixing its namespace) fixes it."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:28
+msgid "Names that start with two underscores are reserved for PHP itself. It works today; it would break only if a future PHP version adds a function with the same name. Renaming it removes the risk."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:33
+msgid "PHP 8.4: E_USER_ERROR is deprecated in trigger_error(). Throw an exception instead."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:38
+msgid "PHP 8.4: the CSV functions want the $escape argument written explicitly, because its default will change. Passing the current default keeps the same behaviour."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:43
+msgid "PHP 8.4 removed this extension from PHP itself (IMAP, Pspell and OCI8 moved to PECL). It only keeps working if the host installs the PECL extension. In the plugin, check that the function exists before calling it, so the site shows a message instead of a fatal error."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:48
+msgid "PHP 8.5: this function has done nothing since PHP 8.0 (the resource is freed automatically) and is now deprecated. Delete the line."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:53
+msgid "PHP 8.4: mysqli_ping() is deprecated. Run the query and reconnect if it fails."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:58
+msgid "PHP 8.4: xml_set_object() is deprecated. Pass full callbacks to the handlers instead."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:63
+msgid "PHP 8.2: utf8_encode() and utf8_decode() are deprecated. Use mb_convert_encoding()."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:68
+msgid "each() no longer exists since PHP 8.0: calling it is a fatal error. Use foreach."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:73
+msgid "create_function() no longer exists since PHP 8.0: calling it is a fatal error. Use an anonymous function."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:78
+msgid "The old mysql_* functions do not exist since PHP 7.0. In WordPress, use $wpdb."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:83
+msgid "mcrypt does not exist since PHP 7.2. Use the OpenSSL functions (data encrypted with mcrypt needs a migration step)."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:88
+msgid "The mhash functions are deprecated since PHP 8.1 and the MHASH_* constants since PHP 8.5. Use hash()."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:93
+msgid "PHP 8.1: strftime() is deprecated. In WordPress, use wp_date()."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:98
+msgid "money_format() no longer exists since PHP 8.0. Use NumberFormatter (intl) or number_format()."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:103
+msgid "PHP 8.2: \"${var}\" inside a string is deprecated. Write \"{$var}\"."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:108
+msgid "Since PHP 8.0 implode() only accepts the separator first: the reverse order is a fatal error."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:113
+msgid "Since PHP 8.0, chained ternaries without parentheses are a fatal error. Add parentheses."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:118
+msgid "PHP 8.4: E_STRICT is deprecated (it has not been used since PHP 8.0). Remove it."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:123
+msgid "PHP 8.5: the long cast names are deprecated. Use the short ones: (bool), (int), (float), (string)."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:128
+msgid "PHP 8.5: the backtick operator is deprecated. Use shell_exec()."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:133
+msgid "PHP 8.3: get_class() without an argument is deprecated. Use self::class or static::class."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:138
+msgid "PHP 8.2: creating a property that the class does not declare is deprecated. Declare it in the class."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:143
+msgid "PHP 8.2: callables written as a string like \"self::method\" are deprecated. Use an array with the class name."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:170
+msgid "How to fix:"
+msgstr ""
+
+#: includes/class-phpready-fixes.php:172
+msgid "Before"
+msgstr ""
+
+#: includes/class-phpready-fixes.php:173
+msgid "After"
+msgstr ""
+
 #: includes/class-phpready-job.php:239
 msgid "Must-use plugins (mu-plugins)"
 msgstr ""
@@ -341,8 +550,33 @@ msgstr ""
 msgid "parent theme"
 msgstr ""
 
-#: includes/class-phpready-job.php:405
+#: includes/class-phpready-job.php:408
 msgid "the server aborted the request while analyzing it"
+msgstr ""
+
+#. translators: 1: date, 2: reason given by WordPress.org (e.g. "Security Issue")
+#: includes/class-phpready-maint.php:107
+msgid "Closed on WordPress.org on %1$s (%2$s)"
+msgstr ""
+
+#. translators: %s: date
+#: includes/class-phpready-maint.php:109
+msgid "Closed on WordPress.org on %s"
+msgstr ""
+
+#. translators: %s: date
+#: includes/class-phpready-maint.php:118
+msgid "Last updated on WordPress.org on %s"
+msgstr ""
+
+#. translators: %s: WordPress version
+#: includes/class-phpready-maint.php:127
+msgid "Tested up to WordPress %s"
+msgstr ""
+
+#. translators: 1: plugin version, 2: PHP version
+#: includes/class-phpready-maint.php:136
+msgid "Version %1$s requires PHP %2$s"
 msgstr ""
 
 #. translators: 1: PHP version, 2: line number, 3: parser message
@@ -360,7 +594,7 @@ msgstr ""
 msgid "%1$d tokens ≈ %2$d MB, %3$d MB available"
 msgstr ""
 
-#: includes/class-phpready-scanner.php:373
+#: includes/class-phpready-scanner.php:497
 msgid "the analyzer failed on this file"
 msgstr ""
 
