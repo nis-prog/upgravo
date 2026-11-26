@@ -13,7 +13,8 @@
  *               respaldo que no corre en PHP moderno).
  *     future    afecta a una versión posterior a la objetivo.
  *     advice    regla de consejo, no de compatibilidad (palabras "reservadas" que PHP nunca
- *               aplicó, cosas "a revisar", interfaces redundantes, ini_get de directivas viejas).
+ *               aplicó, cosas "a revisar", interfaces redundantes, ini_get de directivas viejas,
+ *               nombres de namespace reservados por extensiones PECL que casi ningún hosting tiene).
  *     internal  avisos internos del analizador (finales de línea mezclados, archivo sin PHP).
  *
  * Medido sobre los 20 plugins más instalados: sin filtro 528 hallazgos para PHP 8.4,
@@ -27,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class PHPReady_Filter {
 
 	/** Reglas que nunca son "subir PHP me rompe el sitio". */
-	const ADVICE_REGEX = '/NeedsInspection|Keywords\.ForbiddenNames|RedundantSerializableImplementation|RemovedSerializable\.MissingInterface|ArgumentFunctionsReportCurrentValue|InvalidLongTypeFound|ForbiddenGlobalVariableVariable|IniDirectives\.RemovedIniDirectives|NewClosure\.ThisFoundInStatic|ForbiddenBreakContinueVariableArguments|Discouraged/';
+	const ADVICE_REGEX = '/NeedsInspection|Keywords\.ForbiddenNames|RedundantSerializableImplementation|RemovedSerializable\.MissingInterface|ArgumentFunctionsReportCurrentValue|InvalidLongTypeFound|ForbiddenGlobalVariableVariable|IniDirectives\.RemovedIniDirectives|NewClosure\.ThisFoundInStatic|ForbiddenBreakContinueVariableArguments|Discouraged|Namespaces\.ReservedNames\.\w+PeclReserved/';
 
 	/**
 	 * @param array  $m       Mensaje del escáner: type, source, message, guard.
@@ -90,10 +91,22 @@ class PHPReady_Filter {
 			$bucket = ( 'E' === $m['type'] ) ? 'breaks' : 'deprecated';
 		}
 
-		if ( ! empty( $m['guard'] ) ) {
+		if ( ! empty( $m['guard'] ) || self::in_unused_polyfill( $m, $current ) ) {
 			return self::hide( 'guarded' );
 		}
 		return array( 'bucket' => $bucket, 'reason' => null );
+	}
+
+	/**
+	 * Los polyfills de Symfony ("symfony/polyfill-php72", "-php80"…) solo se cargan en PHP más
+	 * viejo que el de su nombre: en un sitio que ya corre esa versión o una posterior, su código
+	 * no se ejecuta nunca (p. ej. polyfill-php72 usa spl_object_hash(), deprecada en PHP 8.6).
+	 */
+	private static function in_unused_polyfill( array $m, $current ) {
+		if ( empty( $m['file'] ) || ! preg_match( '#(?:^|[\\\\/])symfony[\\\\/]polyfill-php(\d)(\d)(?:[\\\\/]|$)#i', $m['file'], $x ) ) {
+			return false;
+		}
+		return version_compare( $x[1] . '.' . $x[2], $current, '<=' );
 	}
 
 	private static function hide( $reason ) {

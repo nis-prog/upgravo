@@ -1,18 +1,18 @@
-=== Upgravo – PHP Version Compatibility Checker ===
+=== Upgravo – PHP Compatibility Checker & Scanner ===
 Contributors: nicolassalinas
-Tags: php compatibility, compatibility checker, php upgrade, php 8, php 8.4
+Tags: php compatibility, compatibility checker, php upgrade, php update, php version
 Requires at least: 6.0
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 7.4
-Stable tag: 0.1.11
+Stable tag: 0.1.13
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Check if your plugins and theme will break on PHP 8.2, 8.3, 8.4 or 8.5 before you upgrade. Free, on your own server, no account.
+Check if your plugins and theme will break on PHP 8.2, 8.3, 8.4, 8.5 or 8.6 before you upgrade. Free, on your own server, no account.
 
 == Description ==
 
-**PHP 8.2 stops getting security fixes on 31 December 2026.** PHP 8.1 and older already get none, and hosts are moving sites to PHP 8.3, 8.4 and 8.5. Before you change the PHP version, you want to know one thing: will my site break?
+**PHP 8.2 stops getting security fixes on 31 December 2026.** PHP 8.1 and older already get none, and hosts are moving sites to PHP 8.3, 8.4, 8.5 and 8.6. Before you change the PHP version, you want to know one thing: will my site break?
 
 **Upgravo** reads the code of every plugin and your theme, on your own server, and gives you a straight answer:
 
@@ -21,7 +21,7 @@ Check if your plugins and theme will break on PHP 8.2, 8.3, 8.4 or 8.5 before yo
 * **What to do first**: if the plugin that breaks has an update available, it says so. If it is inactive, it says it does not matter until you activate it.
 * **The verdict on the Plugins screen**: after a scan, every plugin row shows "PHP 8.4: OK", "PHP 8.4: works, 12 notices" or "PHP 8.4: 3 breaks", with a link to the details. If a plugin was updated after the scan, it tells you which version was checked.
 * **Abandoned plugins**: plugins not tested with the last three WordPress versions are flagged, using the data WordPress already downloads for updates. Optionally, Upgravo also asks WordPress.org whether each plugin was closed (for example for a security issue) or has not been updated in two years.
-* **How to fix, with code**: for the most common problems (implicitly nullable parameters, removed extensions, `each()`, `create_function()`, `${var}` in strings, dynamic properties, the PHP 8.5 casts…) each finding explains what changed in PHP and shows the code before and after, so you can fix your own code or send it to the plugin author.
+* **How to fix, with code**: for the most common problems (implicitly nullable parameters, removed extensions, `each()`, `create_function()`, `${var}` in strings, dynamic properties, the PHP 8.5 casts, `spl_object_hash()` and the other PHP 8.6 deprecations…) each finding explains what changed in PHP and shows the code before and after, so you can fix your own code or send it to the plugin author.
 * **Copy summary**: one click copies a plain-text report (verdict, what breaks, what to do first) to paste in an email to your client or in a ticket to your host.
 
 = Fewer false alarms =
@@ -35,7 +35,7 @@ Upgravo recognises those guards, but only when the guard names the exact functio
 * **Runs on shared hosting.** The scan runs in short batches with a progress bar, so it never hits the 30-60 second request limit of shared hosts. Close the tab and come back: it resumes where it stopped.
 * **No `exec()`, no shell, no external server.** Your code never leaves your site. Nothing to sign up for, no license key to see results.
 * **Covers the whole site:** must-use plugins, drop-ins (`advanced-cache.php`, `object-cache.php`, `db.php`…), the parent theme, and every class of WordPress core itself, so a plugin that extends `WP_Widget` or `WC_Payment_Gateway` is checked properly instead of ignored.
-* **Any upgrade path from PHP 7.4 to 8.1, 8.2, 8.3, 8.4 or 8.5**: removed functions and extensions (`mysql_*`, `mcrypt`, `each()`, `create_function()`, `imap_*` and `pspell_*` in PHP 8.4…), PHP 8.0 fatal errors, PHP 8.1–8.5 deprecations including dynamic properties (PHP 8.2), implicitly nullable parameters (PHP 8.4), `'self::method'` callables and the PHP 8.5 changes (`(boolean)`/`(integer)` casts, backticks, `curl_close()`…).
+* **Any upgrade path from PHP 7.4 to 8.1, 8.2, 8.3, 8.4, 8.5 or 8.6**: removed functions and extensions (`mysql_*`, `mcrypt`, `each()`, `create_function()`, `imap_*` and `pspell_*` in PHP 8.4…), PHP 8.0 fatal errors, PHP 8.1–8.6 deprecations including dynamic properties (PHP 8.2), implicitly nullable parameters (PHP 8.4), `'self::method'` callables and the PHP 8.5 changes (`(boolean)`/`(integer)` casts, backticks, `curl_close()`…) and the PHP 8.6 changes (`spl_object_hash()`, returning a value from a constructor, `return` inside `finally`, the `mb_ereg*` functions, `is_double()`/`is_integer()`/`is_long()`/`doubleval()`, `strcoll()`…).
 * **Site Health integration**: the verdict shows up in Tools → Site Health.
 * **WP-CLI**: `wp upgravo scan --target=8.4 --format=json` returns exit code 1 if anything active breaks, so agencies can check 50 sites from a script.
 * **CSV export** of every finding, including the hidden ones and why they were hidden.
@@ -48,7 +48,7 @@ Hosts send the same email to all your clients: "your PHP version is going away".
 
 = Built on PHPCompatibility =
 
-The analysis engine is [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) (176 rules maintained by the PHP community since 2012) running on PHP_CodeSniffer, bundled inside the plugin, plus Upgravo's own detectors for PHP 8.2 dynamic properties and relative callables. It reads code; it does not run it. A static scan cannot see problems that only appear at runtime, so treat "nothing breaks" as "nothing we can see breaks", and keep a backup before any upgrade.
+The analysis engine is [PHPCompatibility](https://github.com/PHPCompatibility/PHPCompatibility) (181 rules maintained by the PHP community since 2012) running on PHP_CodeSniffer, bundled inside the plugin, plus Upgravo's own detectors for PHP 8.2 dynamic properties and relative callables. It reads code; it does not run it. A static scan cannot see problems that only appear at runtime, so treat "nothing breaks" as "nothing we can see breaks", and keep a backup before any upgrade.
 
 = External services =
 
@@ -153,6 +153,17 @@ Yes. Upgravo Pro adds scheduled scans with an email when an update introduces an
 6. The verdict with what to do first, the Copy summary button and the optional WordPress.org maintenance check.
 
 == Changelog ==
+
+= 0.1.13 =
+* PHP 8.6 can be chosen as the target version: `spl_object_hash()`, returning a value from a constructor or destructor, `return` inside `finally`, the `mb_ereg*` functions, `is_double()`, `is_integer()`, `is_long()`, `doubleval()`, `strcoll()`, `metaphone()`, `spl_classes()` and `is_a()`/`is_subclass_of()` with a string while `$allow_string` is false, with "How to fix" examples for the common ones.
+* PHP 8.5: a `case` or `default` ending with a semicolon is now detected.
+* Code inside Symfony polyfills that never loads on the site's PHP version (for example `symfony/polyfill-php72`) is no longer reported.
+* Namespace names reserved by PECL extensions (for example `http`) are listed as advice instead of notices: they only matter if that extension is installed.
+* Analysis engine updated to PHPCompatibility 10.0.0-alpha3.
+* Tested with WordPress 7.2.
+
+= 0.1.12 =
+* Plugin name updated to "Upgravo – PHP Compatibility Checker & Scanner". No change in behaviour.
 
 = 0.1.11 =
 * The Plugins screen shows each plugin's result next to it ("PHP 8.4: OK", "works, 12 notices" or "3 breaks"), with a link to the details and a note if the plugin was updated after the scan.

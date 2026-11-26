@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Upgravo 0.1.7\n"
+"Project-Id-Version: Upgravo 0.1.13\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
@@ -402,23 +402,23 @@ msgid_plural "%d files not checked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-phpready-filter.php:147
+#: includes/class-phpready-filter.php:160
 msgid "already applies on the current PHP version"
 msgstr ""
 
-#: includes/class-phpready-filter.php:148
+#: includes/class-phpready-filter.php:161
 msgid "code guarded by a version check"
 msgstr ""
 
-#: includes/class-phpready-filter.php:149
+#: includes/class-phpready-filter.php:162
 msgid "affects a later PHP version"
 msgstr ""
 
-#: includes/class-phpready-filter.php:150
+#: includes/class-phpready-filter.php:163
 msgid "advice, not compatibility"
 msgstr ""
 
-#: includes/class-phpready-filter.php:151
+#: includes/class-phpready-filter.php:164
 msgid "analyzer internal"
 msgstr ""
 
@@ -515,26 +515,66 @@ msgid "PHP 8.5: the backtick operator is deprecated. Use shell_exec()."
 msgstr ""
 
 #: includes/class-phpready-fixes.php:133
-msgid "PHP 8.3: get_class() without an argument is deprecated. Use self::class or static::class."
+msgid "PHP 8.6: spl_object_hash() is deprecated. Use spl_object_id(). It returns a number instead of a 32-character text, so check any code that stores the result or compares it with a string."
 msgstr ""
 
 #: includes/class-phpready-fixes.php:138
-msgid "PHP 8.2: creating a property that the class does not declare is deprecated. Declare it in the class."
+msgid "PHP 8.6: is_double() is an old alias and is now deprecated. Use is_float(), which does exactly the same."
 msgstr ""
 
 #: includes/class-phpready-fixes.php:143
-msgid "PHP 8.2: callables written as a string like \"self::method\" are deprecated. Use an array with the class name."
+msgid "PHP 8.6: this function is an old alias and is now deprecated. Use is_int(), which does exactly the same."
 msgstr ""
 
-#: includes/class-phpready-fixes.php:170
-msgid "How to fix:"
+#: includes/class-phpready-fixes.php:148
+msgid "PHP 8.6: doubleval() is an old alias and is now deprecated. Use floatval(), which does exactly the same."
 msgstr ""
 
-#: includes/class-phpready-fixes.php:172
-msgid "Before"
+#: includes/class-phpready-fixes.php:153
+msgid "PHP 8.6: the mb_ereg family of functions is deprecated. Use the preg_ functions with the \"u\" modifier, which handle UTF-8 text. mb_regex_encoding() and mb_regex_set_options() can simply be deleted."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:158
+msgid "PHP 8.6: strcoll() is deprecated because it depends on the server locale. Use Collator from the intl extension, with the language you need."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:163
+msgid "PHP 8.6: returning a value from __construct() or __destruct() is deprecated. The value was always ignored, so leave the return without a value."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:168
+msgid "PHP 8.6: a return inside finally is deprecated. It silently replaces the value returned by try and swallows exceptions. Move the return out of the finally block."
 msgstr ""
 
 #: includes/class-phpready-fixes.php:173
+msgid "PHP 8.6: calling is_a() or is_subclass_of() with a class name as text while the third argument is false is deprecated. With text it always returned false, so check that the value is an object first: the result stays the same."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:178
+msgid "PHP 8.5: ending a case of a switch with a semicolon is deprecated. Use a colon."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:183
+msgid "PHP 8.3: get_class() without an argument is deprecated. Use self::class or static::class."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:188
+msgid "PHP 8.2: creating a property that the class does not declare is deprecated. Declare it in the class."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:193
+msgid "PHP 8.2: callables written as a string like \"self::method\" are deprecated. Use an array with the class name."
+msgstr ""
+
+#: includes/class-phpready-fixes.php:227
+msgid "How to fix:"
+msgstr ""
+
+#: includes/class-phpready-fixes.php:229
+msgid "Before"
+msgstr ""
+
+#: includes/class-phpready-fixes.php:230
 msgid "After"
 msgstr ""
 

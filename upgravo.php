@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Upgravo – PHP Version Compatibility Checker
+ * Plugin Name:       Upgravo – PHP Compatibility Checker & Scanner
  * Plugin URI:        https://phpready.com/
  * Description:       Scans your plugins and theme on your own server and tells you what will break before you upgrade PHP. No external service, no exec().
- * Version:           0.1.11
+ * Version:           0.1.13
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Nicolás Alejandro Salinas
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PHPREADY_VERSION', '0.1.11' );
+define( 'PHPREADY_VERSION', '0.1.13' );
 define( 'PHPREADY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PHPREADY_URL', plugin_dir_url( __FILE__ ) );
 
@@ -148,7 +148,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 } );
 
 function phpready_target_versions() {
-	return array( '8.1', '8.2', '8.3', '8.4', '8.5' );
+	return array( '8.1', '8.2', '8.3', '8.4', '8.5', '8.6' );
 }
 
 /** "8.1" a partir de "8.1.29". */

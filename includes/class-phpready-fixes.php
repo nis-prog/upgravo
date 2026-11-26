@@ -129,6 +129,56 @@ class PHPReady_Fixes {
 				"\$out = `ls -la`;",
 				"\$out = shell_exec( 'ls -la' );",
 			),
+			'#^FunctionUse\.RemovedFunctions\.spl_object_hashDeprecated#' => array(
+				__( 'PHP 8.6: spl_object_hash() is deprecated. Use spl_object_id(). It returns a number instead of a 32-character text, so check any code that stores the result or compares it with a string.', 'upgravo' ),
+				"\$key = spl_object_hash( \$object );",
+				"\$key = spl_object_id( \$object );",
+			),
+			'#^FunctionUse\.RemovedFunctions\.is_doubleDeprecated#' => array(
+				__( 'PHP 8.6: is_double() is an old alias and is now deprecated. Use is_float(), which does exactly the same.', 'upgravo' ),
+				"if ( is_double( \$value ) ) {",
+				"if ( is_float( \$value ) ) {",
+			),
+			'#^FunctionUse\.RemovedFunctions\.(is_integer|is_long)Deprecated#' => array(
+				__( 'PHP 8.6: this function is an old alias and is now deprecated. Use is_int(), which does exactly the same.', 'upgravo' ),
+				"if ( %fn%( \$value ) ) {",
+				"if ( is_int( \$value ) ) {",
+			),
+			'#^FunctionUse\.RemovedFunctions\.doublevalDeprecated#' => array(
+				__( 'PHP 8.6: doubleval() is an old alias and is now deprecated. Use floatval(), which does exactly the same.', 'upgravo' ),
+				"\$price = doubleval( \$raw );",
+				"\$price = floatval( \$raw );",
+			),
+			'#^FunctionUse\.RemovedFunctions\.(mb_ereg|mb_eregi|mb_split|mb_regex_)#' => array(
+				__( 'PHP 8.6: the mb_ereg family of functions is deprecated. Use the preg_ functions with the "u" modifier, which handle UTF-8 text. mb_regex_encoding() and mb_regex_set_options() can simply be deleted.', 'upgravo' ),
+				"\$clean = mb_ereg_replace( '[0-9]+', '#', \$text );\n\$parts = mb_split( ',', \$list );",
+				"\$clean = preg_replace( '/[0-9]+/u', '#', \$text );\n\$parts = preg_split( '/,/u', \$list );",
+			),
+			'#^FunctionUse\.RemovedFunctions\.strcollDeprecated#' => array(
+				__( 'PHP 8.6: strcoll() is deprecated because it depends on the server locale. Use Collator from the intl extension, with the language you need.', 'upgravo' ),
+				"usort( \$names, 'strcoll' );",
+				"\$collator = new Collator( 'es_ES' );\nusort( \$names, array( \$collator, 'compare' ) );",
+			),
+			'#^FunctionDeclarations\.RemovedReturnYieldInConstructDestruct#' => array(
+				__( 'PHP 8.6: returning a value from __construct() or __destruct() is deprecated. The value was always ignored, so leave the return without a value.', 'upgravo' ),
+				"public function __construct( \$id ) {\n\tif ( ! \$id ) {\n\t\treturn false;\n\t}\n}",
+				"public function __construct( \$id ) {\n\tif ( ! \$id ) {\n\t\treturn;\n\t}\n}",
+			),
+			'#^ControlStructures\.RemovedReturnFromFinally#' => array(
+				__( 'PHP 8.6: a return inside finally is deprecated. It silently replaces the value returned by try and swallows exceptions. Move the return out of the finally block.', 'upgravo' ),
+				"try {\n\t\$result = run();\n} finally {\n\tcleanup();\n\treturn \$result;\n}",
+				"try {\n\t\$result = run();\n} finally {\n\tcleanup();\n}\nreturn \$result;",
+			),
+			'#^ParameterValues\.RemovedIsASubclassOfAllowStringFalse#' => array(
+				__( 'PHP 8.6: calling is_a() or is_subclass_of() with a class name as text while the third argument is false is deprecated. With text it always returned false, so check that the value is an object first: the result stays the same.', 'upgravo' ),
+				"if ( is_a( \$value, 'WC_Product', false ) ) {",
+				"if ( is_object( \$value ) && is_a( \$value, 'WC_Product' ) ) {",
+			),
+			'#^ControlStructures\.RemovedTerminatingCaseWithSemicolon#' => array(
+				__( 'PHP 8.5: ending a case of a switch with a semicolon is deprecated. Use a colon.', 'upgravo' ),
+				"case 'draft';\ndefault;",
+				"case 'draft':\ndefault:",
+			),
 			'#^ParameterValues\.RemovedGetClassNoArgs#' => array(
 				__( 'PHP 8.3: get_class() without an argument is deprecated. Use self::class or static::class.', 'upgravo' ),
 				"\$name = get_class();",

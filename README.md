@@ -2,7 +2,7 @@
 
 # Upgravo – PHP Version Compatibility Checker
 
-Scans the plugins and theme of a WordPress site **on its own server** and tells you what will break before you upgrade PHP (8.1 to 8.5). No external service, no `exec()`, no account.
+Scans the plugins and theme of a WordPress site **on its own server** and tells you what will break before you upgrade PHP (8.1 to 8.6). No external service, no `exec()`, no account.
 
 - **Install:** WordPress admin → Plugins → Add New → search for **Upgravo** — or [wordpress.org/plugins/upgravo](https://wordpress.org/plugins/upgravo/)
 - **Try it in your browser:** the *Live Preview* button on the WordPress.org page opens it in WordPress Playground.

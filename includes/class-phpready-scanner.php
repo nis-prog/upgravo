@@ -412,7 +412,7 @@ class PHPReady_Scanner {
 		self::boot();
 
 		$t0      = microtime( true );
-		// Nuestro ruleset: PHPCompatibility menos las 92 reglas "New*" (solo sirven a quien BAJA de versión).
+		// Nuestro ruleset: PHPCompatibility menos las 94 reglas "New*" (solo sirven a quien BAJA de versión).
 		$standard = defined( 'PHPREADY_FULL_RULESET' ) && PHPREADY_FULL_RULESET ? 'PHPCompatibility' : dirname( __DIR__ ) . '/ruleset/upgrade.xml';
 		$config  = new \PHP_CodeSniffer\Config(
 			array(

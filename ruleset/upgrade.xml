@@ -30,6 +30,7 @@
 		<exclude name="PHPCompatibility.FunctionDeclarations.NewParamTypeDeclarations"/>
 		<exclude name="PHPCompatibility.FunctionDeclarations.NewReturnTypeDeclarations"/>
 		<exclude name="PHPCompatibility.FunctionDeclarations.NewTrailingComma"/>
+		<exclude name="PHPCompatibility.FunctionNameRestrictions.NewDebuggableEnums"/>
 		<exclude name="PHPCompatibility.FunctionNameRestrictions.NewMagicMethods"/>
 		<exclude name="PHPCompatibility.FunctionUse.NewFunctionParameters"/>
 		<exclude name="PHPCompatibility.FunctionUse.NewFunctions"/>
@@ -75,6 +76,7 @@
 		<exclude name="PHPCompatibility.ParameterValues.NewPasswordAlgoConstantValues"/>
 		<exclude name="PHPCompatibility.ParameterValues.NewProcOpenCmdArray"/>
 		<exclude name="PHPCompatibility.ParameterValues.NewStripTagsAllowableTagsArray"/>
+		<exclude name="PHPCompatibility.ParameterValues.NewTrimCharactersDefault"/>
 		<exclude name="PHPCompatibility.Syntax.NewArrayStringDereferencing"/>
 		<exclude name="PHPCompatibility.Syntax.NewArrayUnpacking"/>
 		<exclude name="PHPCompatibility.Syntax.NewClassMemberAccess"/>
